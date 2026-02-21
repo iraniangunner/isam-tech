@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="#ffffff" />
+    <script>
+      (function () {
+        function getCookie(name) {
+          var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+          return match ? decodeURIComponent(match[2]) : null;
+        }
+
+        var path = window.location.pathname || '/';
+        var routeLanguageMatch = path.match(/^\/(fa|en)(\/|$)/);
+        var pathLanguage = routeLanguageMatch ? routeLanguageMatch[1] : null;
+        var cookieLanguage = getCookie('isam_language');
+        var browserLanguage = (navigator.language || 'en').split('-')[0];
+        var language = pathLanguage || (cookieLanguage === 'fa' || cookieLanguage === 'en'
+          ? cookieLanguage
+          : browserLanguage === 'fa'
+            ? 'fa'
+            : 'en');
+
+        document.documentElement.lang = language;
+        document.documentElement.dir = language === 'fa' ? 'rtl' : 'ltr';
+      })();
+    </script>
+
+    <link rel="icon" href="/img/isam-logo.png" />
+    <link rel="apple-touch-icon" href="/img/isam-logo.png" />
+
+    <link rel="preload" href="/fonts/plus-jakarta-sans/PlusJakartaSans-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/vazirmatn/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/vazirmatn/Vazirmatn-Bold.woff2" as="font" type="font/woff2" crossorigin />
+
+    <title>ISAM | Industrial Intelligence and Automation Solutions</title>
+    <meta name="description" content="ISAM provides digital twin, IIoT, SCADA, EMS, predictive maintenance, and industrial AI solutions for smarter operations." />
+    <meta name="keywords" content="ISAM, automation, digital twin, IIoT, SCADA, EMS, predictive maintenance, industrial AI, factory intelligence, اتوماسیون صنعتی, دوقلوی دیجیتال" />
+    <meta name="author" content="ISAM" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://isam-tech.com/" />
+    <link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa" />
+    <link rel="alternate" hreflang="en" href="https://isam-tech.com/en" />
+    <link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ISAM" />
+    <meta property="og:title" content="ISAM | Industrial Intelligence and Automation Solutions" />
+    <meta property="og:description" content="ISAM provides digital twin, IIoT, SCADA, EMS, predictive maintenance, and industrial AI solutions." />
+    <meta property="og:image" content="https://isam-tech.com/img/isam-logo.png" />
+    <meta property="og:url" content="https://isam-tech.com/" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ISAM | Industrial Intelligence and Automation Solutions" />
+    <meta name="twitter:description" content="Digital twin, IIoT, SCADA, EMS, predictive maintenance, and industrial AI solutions by ISAM." />
+    <meta name="twitter:image" content="https://isam-tech.com/img/isam-logo.png" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ISAM",
+      "alternateName": "ایسام",
+      "url": "https://isam-tech.com",
+      "logo": "https://isam-tech.com/img/isam-logo.png",
+      "description": "ISAM delivers industrial intelligence solutions including digital twin, IIoT, SCADA, EMS, predictive maintenance, and AI analytics.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+98-21-8866-0928",
+        "contactType": "customer service",
+        "availableLanguage": ["Persian", "English"]
+      },
+      "sameAs": [
+        "https://linkedin.com",
+        "https://twitter.com"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ISAM",
+      "alternateName": "ایسام",
+      "url": "https://isam-tech.com",
+      "inLanguage": ["fa", "en"]
+    }
+    </script>
+  </head>
+  <body id="page-top">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

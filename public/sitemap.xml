@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+>
+  <url>
+    <loc>https://isam-tech.com/fa</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+  <url>
+    <loc>https://isam-tech.com/en</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+  <url>
+    <loc>https://isam-tech.com/fa/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D9%85%D8%A7</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D9%85%D8%A7" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en/about-us" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+  <url>
+    <loc>https://isam-tech.com/en/about-us</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa/%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D9%85%D8%A7" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en/about-us" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+  <url>
+    <loc>https://isam-tech.com/fa/%D8%AE%D8%AF%D9%85%D8%A7%D8%AA</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa/%D8%AE%D8%AF%D9%85%D8%A7%D8%AA" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en/services" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+  <url>
+    <loc>https://isam-tech.com/en/services</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa/%D8%AE%D8%AF%D9%85%D8%A7%D8%AA" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en/services" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+  <url>
+    <loc>https://isam-tech.com/fa/%D8%AA%D9%85%D8%A7%D8%B3-%D8%A8%D8%A7-%D9%85%D8%A7</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa/%D8%AA%D9%85%D8%A7%D8%B3-%D8%A8%D8%A7-%D9%85%D8%A7" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+  <url>
+    <loc>https://isam-tech.com/en/contact</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa/%D8%AA%D9%85%D8%A7%D8%B3-%D8%A8%D8%A7-%D9%85%D8%A7" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+  <url>
+    <loc>https://isam-tech.com/fa/%D8%B3%DB%8C%D8%A7%D8%B3%D8%AA-%D8%AD%D8%B1%DB%8C%D9%85-%D8%AE%D8%B5%D9%88%D8%B5%DB%8C</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa/%D8%B3%DB%8C%D8%A7%D8%B3%D8%AA-%D8%AD%D8%B1%DB%8C%D9%85-%D8%AE%D8%B5%D9%88%D8%B5%DB%8C" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+  <url>
+    <loc>https://isam-tech.com/en/privacy-policy</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa/%D8%B3%DB%8C%D8%A7%D8%B3%D8%AA-%D8%AD%D8%B1%DB%8C%D9%85-%D8%AE%D8%B5%D9%88%D8%B5%DB%8C" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+  <url>
+    <loc>https://isam-tech.com/fa/%D8%AD%D8%B1%DB%8C%D9%85-%D8%AF%D8%A7%D8%AF%D9%87</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa/%D8%AD%D8%B1%DB%8C%D9%85-%D8%AF%D8%A7%D8%AF%D9%87" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en/data-privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+  <url>
+    <loc>https://isam-tech.com/en/data-privacy</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="fa" href="https://isam-tech.com/fa/%D8%AD%D8%B1%DB%8C%D9%85-%D8%AF%D8%A7%D8%AF%D9%87" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://isam-tech.com/en/data-privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://isam-tech.com/" />
+  </url>
+</urlset>

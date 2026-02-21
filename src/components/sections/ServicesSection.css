@@ -1,0 +1,109 @@
+.services-section {
+  background: var(--bg-secondary);
+}
+
+.services-section__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.services-section__card {
+  background: var(--color-white);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+.services-section__card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+}
+
+.services-section__card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-lg);
+  transition: all var(--transition-base);
+}
+
+.services-section__card:hover .services-section__card-icon {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.services-section__card-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.services-section__card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-primary);
+}
+
+.services-section__card-description {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+}
+
+.services-section__card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  transition: all var(--transition-fast);
+}
+
+.services-section__card-link:hover {
+  gap: var(--spacing-sm);
+}
+
+.services-section__card-link svg {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--transition-fast);
+}
+
+:root[dir="rtl"] .services-section__card-link svg {
+  transform: scaleX(-1);
+}
+
+.services-section__card-link:hover svg {
+  transform: translateX(4px);
+}
+
+:root[dir="rtl"] .services-section__card-link:hover svg {
+  transform: scaleX(-1) translateX(4px);
+}
+
+@media (max-width: 1024px) {
+  .services-section__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .services-section__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .services-section__card {
+    padding: var(--spacing-lg);
+  }
+}

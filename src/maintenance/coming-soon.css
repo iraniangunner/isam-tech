@@ -1,0 +1,93 @@
+:root {
+  --maintenance-bg: #f6f7f8;
+  --maintenance-panel: #ffffff;
+  --maintenance-text: #171717;
+  --maintenance-muted: #525252;
+  --maintenance-border: #e5e5e5;
+  --maintenance-accent: #0a0a0a;
+}
+
+.coming-soon-page {
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 15% 20%, rgb(23 23 23 / 6%), transparent 30%),
+    radial-gradient(circle at 85% 10%, rgb(115 115 115 / 10%), transparent 45%),
+    var(--maintenance-bg);
+  color: var(--maintenance-text);
+  font-family: "Plus Jakarta Sans", "Open Sans", sans-serif;
+}
+
+.coming-soon-card {
+  width: min(760px, 100%);
+  border: 1px solid var(--maintenance-border);
+  border-radius: 24px;
+  background: var(--maintenance-panel);
+  padding: 2.8rem;
+  box-shadow: 0 25px 40px rgb(0 0 0 / 10%);
+  text-align: center;
+}
+
+.coming-soon-logo {
+  width: min(220px, 50%);
+  margin: 0 auto 1rem;
+}
+
+.coming-soon-kicker {
+  margin: 0 0 0.9rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  color: var(--maintenance-muted);
+}
+
+.coming-soon-card h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+  color: var(--maintenance-accent);
+}
+
+.coming-soon-message {
+  margin: 1rem auto 0;
+  color: var(--maintenance-muted);
+  font-size: 1.04rem;
+  line-height: 1.7;
+  max-width: 56ch;
+}
+
+.coming-soon-contact {
+  margin: 1.35rem 0 0;
+  color: var(--maintenance-muted);
+}
+
+.coming-soon-link {
+  color: var(--maintenance-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.coming-soon-link:focus-visible {
+  outline: 3px solid #a3a3a3;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.coming-soon-footer {
+  margin: 1.25rem 0 0;
+  font-size: 0.85rem;
+  color: #737373;
+}
+
+@media (max-width: 680px) {
+  .coming-soon-card {
+    padding: 1.8rem;
+  }
+
+  .coming-soon-logo {
+    width: min(180px, 60%);
+  }
+}

@@ -1,0 +1,116 @@
+.math-captcha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.math-captcha__question {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.math-captcha__numbers {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  font-family: var(--font-en);
+  letter-spacing: 1px;
+}
+
+.math-captcha__refresh {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.math-captcha__refresh:hover {
+  background: var(--bg-tertiary);
+  color: var(--color-primary);
+  transform: rotate(180deg);
+}
+
+.math-captcha__refresh svg {
+  width: 18px;
+  height: 18px;
+}
+
+.math-captcha__timer {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.math-captcha__timer--expired {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.math-captcha__input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.math-captcha__input {
+  width: 100px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-align: center;
+  border: 2px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  transition: all var(--transition-fast);
+}
+
+.math-captcha__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.1);
+}
+
+.math-captcha__input--valid {
+  border-color: var(--color-success);
+  background: #f0fdf4;
+}
+
+.math-captcha__input--error {
+  border-color: var(--color-error);
+  background: #fef2f2;
+}
+
+.math-captcha__check {
+  position: absolute;
+  right: -30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--color-success);
+}
+
+:root[dir="rtl"] .math-captcha__check {
+  right: auto;
+  left: -30px;
+}
+
+.math-captcha__check svg {
+  width: 16px;
+  height: 16px;
+}
+
+.math-captcha__error {
+  font-size: 0.8125rem;
+  color: var(--color-error);
+}

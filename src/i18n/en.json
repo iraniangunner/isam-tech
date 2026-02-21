@@ -1,0 +1,448 @@
+{
+  "meta": {
+    "title": "ISAM | Industrial Intelligence and Automation Solutions",
+    "description": "ISAM provides digital twin, IIoT, EMS, SCADA, predictive maintenance, and industrial AI solutions for modern industrial operations."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "contact": "Contact",
+    "mainNav": "Main navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "hero": {
+    "title": "Data-Driven Intelligence for Industrial Operations",
+    "subtitle": "From digital twin to executive decision support, ISAM helps organizations increase productivity, reduce operational cost, and make faster, more accurate decisions.",
+    "cta": "Explore ISAM",
+    "cta2": "Talk to Our Team"
+  },
+  "whyIsam": {
+    "title": "Why ISAM?",
+    "subtitle": "Most factories sit on mountains of untapped data. We turn it into decisions that move the needle.",
+    "problemTitle": "The Reality on the Ground",
+    "problemDescription": "Industrial operations lose millions every year to problems that are invisible until it's too late.",
+    "problems": [
+      "Data trapped in silos across disconnected systems and departments",
+      "Decisions driven by intuition instead of real-time operational evidence",
+      "Energy waste hidden behind outdated meters and manual readings",
+      "Reactive maintenance that costs 3-8x more than prevention",
+      "No unified view of what is actually happening on the plant floor"
+    ],
+    "solutionTitle": "The ISAM Approach",
+    "solutionDescription": "A single integrated platform that connects your equipment, data, and decisions into one operational backbone.",
+    "solutions": [
+      "Unified data collection from sensors, PLCs, and enterprise systems",
+      "Real-time analytics and AI that convert data into actionable insight",
+      "Continuous energy monitoring with consumption mapped to every asset",
+      "Predictive maintenance that catches failures before they happen",
+      "Executive dashboards that give leadership full operational visibility"
+    ],
+    "impacts": [
+      { "value": "30%", "label": "Average reduction in energy waste" },
+      { "value": "5x", "label": "Faster operational decisions" },
+      { "value": "<12mo", "label": "Typical payback period" }
+    ]
+  },
+  "about": {
+    "title": "About ISAM",
+    "subtitle": "Engineering Intelligence. Delivering Impact.",
+    "description": "Founded by a team of industrial engineers and data scientists, ISAM bridges the gap between operational technology and intelligent analytics to help manufacturers compete in a data-driven world.",
+    "mission": "Our Mission",
+    "missionText": "Transform industrial data into reliable operational decisions that improve productivity, sustainability, and quality.",
+    "vision": "Our Vision",
+    "visionText": "Become a regional leader in industrial intelligence through scalable and integrated digital solutions.",
+    "values": "Our Values",
+    "valuesText": "Transparency, precision, accountability, and long-term value creation for industry.",
+    "stats": {
+      "years": "Years of Industry Experience",
+      "partners": "International Partners",
+      "technologies": "Core Technologies",
+      "engineers": "Technical Specialists"
+    },
+    "storyTitle": "Who We Are",
+    "storyParagraphs": [
+      "ISAM was established to deliver industrial intelligence services that improve process quality, analyze operational data, and support strategic decision-making.",
+      "By combining modern technologies such as artificial intelligence and advanced analytics, we develop practical and deployable solutions for real-world industry constraints.",
+      "Our focus is improving efficiency, reducing operating costs, and driving continuous quality improvement through integrated systems and management dashboards.",
+      "Our long-term goal is to build smart infrastructure that supports sustainable growth, competitiveness, and digital transformation across industrial sectors."
+    ],
+    "valuesSectionTitle": "Core Principles",
+    "valuesGrid": [
+      {
+        "title": "Data-Centric",
+        "description": "Every solution is designed around trustworthy, traceable, and actionable data."
+      },
+      {
+        "title": "Integrated",
+        "description": "We connect equipment, systems, and teams into one operational framework."
+      },
+      {
+        "title": "Secure by Design",
+        "description": "Information security, access governance, and data protection are built into delivery."
+      },
+      {
+        "title": "Sustainable Transformation",
+        "description": "Phased implementation ensures measurable economic and environmental value."
+      }
+    ],
+    "challenges": {
+      "title": "Common Industrial Project Challenges",
+      "items": [
+        "Lack of a unified and holistic operational view",
+        "Integration complexity with legacy systems and equipment",
+        "Information security and organizational data protection risks",
+        "Human resistance to digital change",
+        "Technical complexity and multi-layered implementation",
+        "Contractor dependency and weak internal knowledge transfer",
+        "Budget constraints and macro-economic pressure",
+        "Limited readiness for scalability and future adaptation"
+      ]
+    },
+    "solutions": {
+      "title": "ISAM Delivery Approach",
+      "items": [
+        "Build an integrated data collection and analytics backbone",
+        "Use flexible communication interfaces for system connectivity",
+        "Implement information security, access control, and continuous monitoring",
+        "Engage key users, clarify goals, and run targeted enablement",
+        "Design modular architecture and execute in delivery phases",
+        "Transfer knowledge with focused training and strong documentation",
+        "Prioritize staged rollout for the highest incremental value",
+        "Align design with scalability and industrial standards"
+      ]
+    },
+    "benefits": {
+      "title": "Business Value of Industrial Intelligence",
+      "environment": {
+        "title": "Environmental Benefits",
+        "items": [
+          "Root-cause analysis of pollution drivers",
+          "Sustainable water management and industrial wastewater recycling",
+          "Waste and scrap reduction",
+          "Incident cause identification and response management"
+        ]
+      },
+      "financial": {
+        "title": "Financial Benefits",
+        "items": [
+          "Higher cost transparency",
+          "Reduced energy and resource waste",
+          "Lower unplanned downtime and higher output",
+          "Better predictability of future costs",
+          "Lower trial-and-error costs",
+          "Reduced asset lifecycle cost",
+          "Lower waste-related losses",
+          "Shorter payback period",
+          "Positive net present value (NPV)",
+          "Structural optimization of cost and risk flow"
+        ]
+      }
+    }
+  },
+  "services": {
+    "title": "ISAM Services",
+    "subtitle": "Integrated capabilities for industrial digitalization, monitoring, and decision intelligence",
+    "kpiTitle": "Key Performance Indicators (KPIs)",
+    "learnMore": "Service details",
+    "items": {
+      "digitalTwin": {
+        "title": "Digital Twin",
+        "description": "A Digital Twin is a synchronized, dynamic digital model of a physical asset, process, or system that simulates real behavior using live operational data.",
+        "features": [
+          "Digital modeling of assets and process flows",
+          "Live data synchronization from operations",
+          "Scenario simulation before implementation",
+          "Reduced engineering and management decision risk"
+        ],
+        "kpis": [
+          "Model accuracy (alignment with real behavior)",
+          "Digital twin coverage (modeled assets/processes)",
+          "Decision risk reduction",
+          "Simulation response time"
+        ]
+      },
+      "iot": {
+        "title": "Industrial IoT (IIoT)",
+        "description": "IIoT creates the connection layer between industrial equipment and digital platforms to collect, transmit, and store reliable real-time data.",
+        "features": [
+          "Sensor and equipment connectivity",
+          "Secure data transmission from edge to server",
+          "Real-time monitoring of operating variables",
+          "Data foundation for all intelligence services"
+        ],
+        "kpis": [
+          "Data availability uptime",
+          "Data quality ratio",
+          "Connected equipment coverage",
+          "Device-to-server transmission latency"
+        ]
+      },
+      "maintenance": {
+        "title": "Predictive Maintenance (PDM)",
+        "description": "PDM is a data-driven maintenance strategy that predicts failure timing and probability before breakdown, enabling optimized maintenance planning.",
+        "features": [
+          "Condition monitoring for critical assets",
+          "Failure prediction using performance patterns",
+          "Risk-based maintenance work-order prioritization",
+          "Reduced emergency maintenance workload"
+        ],
+        "kpis": [
+          "Unplanned downtime reduction",
+          "Failure prediction accuracy",
+          "MTBF improvement",
+          "Emergency repair cost reduction"
+        ]
+      },
+      "scada": {
+        "title": "Advanced SCADA and Smart Monitoring",
+        "description": "This service enables real-time and historical monitoring, recording, and analysis of industrial processes and equipment as the core operational supervision layer.",
+        "features": [
+          "Multi-level operational dashboards",
+          "Event logging and process historian setup",
+          "Alarm and critical-event management",
+          "Fast operator and supervisor situational access"
+        ],
+        "kpis": [
+          "Deviation detection time",
+          "Effective alarm rate",
+          "System stability",
+          "User adoption and utilization"
+        ]
+      },
+      "ems": {
+        "title": "Energy Management System (EMS)",
+        "description": "EMS provides continuous monitoring, analysis, and optimization of energy consumption with visibility by equipment, unit, and product.",
+        "features": [
+          "Continuous monitoring of electricity, gas, steam, and water",
+          "Consumption pattern and deviation analytics",
+          "Energy-loss hotspot identification",
+          "Decision support for energy cost reduction"
+        ],
+        "kpis": [
+          "Energy intensity reduction",
+          "Energy cost reduction",
+          "Loss hotspot elimination",
+          "Deviation control against optimal baseline"
+        ]
+      },
+      "ai": {
+        "title": "Industrial Data Analytics and AI",
+        "description": "Using analytical models and AI algorithms, operational data is converted into actionable insights that improve process consistency and production outcomes.",
+        "features": [
+          "Operational pattern mining",
+          "Predictive modeling for risk control",
+          "Anomaly detection and root-cause analysis",
+          "Actionable insight generation"
+        ],
+        "kpis": [
+          "Analytical model accuracy",
+          "Process variability reduction",
+          "Production KPI improvement",
+          "Analytics output utilization rate"
+        ]
+      },
+      "dss": {
+        "title": "Executive Dashboard and Decision Support System (DSS)",
+        "description": "DSS translates technical and operational data into management-ready insight for rapid KPI tracking and informed decision-making.",
+        "features": [
+          "Management dashboard integration",
+          "KPI visibility aligned to strategic objectives",
+          "Analytical reporting for leadership",
+          "Faster and evidence-based decision workflows"
+        ],
+        "kpis": [
+          "Decision cycle-time reduction",
+          "Performance transparency improvement",
+          "Managerial dashboard adoption",
+          "Execution alignment with strategic goals"
+        ]
+      },
+      "automation": {
+        "title": "Smart Industrial Automation",
+        "description": "Design and integration of automation architecture that connects process control, operational data, and decision layers to improve plant stability and throughput.",
+        "features": [
+          "Control logic optimization for production lines",
+          "PLC/DCS integration with monitoring and data layers",
+          "Operational stability enhancement",
+          "Human error reduction in critical workflows"
+        ],
+        "kpis": [
+          "Control-related stoppage reduction",
+          "Process stability improvement",
+          "Line productivity gain",
+          "Operational error-rate reduction"
+        ]
+      }
+    }
+  },
+  "contact": {
+    "title": "Contact ISAM",
+    "subtitle": "Our team is ready to review your industrial requirements.",
+    "form": {
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "subject": "Subject",
+      "message": "Your Message",
+      "captcha": "Solve the expression",
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "success": "Your message was sent successfully.",
+      "error": "Message delivery failed. Please try again.",
+      "captchaError": "Please solve the captcha correctly before submitting.",
+      "captchaLabels": {
+        "incorrect": "The entered answer is incorrect.",
+        "expired": "Captcha expired. Please generate a new challenge.",
+        "refreshAria": "Generate a new captcha",
+        "expiresIn": "Expires in",
+        "secondsSuffix": "s",
+        "answerPlaceholder": "?",
+        "inputAria": "Enter captcha result"
+      },
+      "company": "Company",
+      "configError": "Contact form is not configured yet. Add your Formspree form ID to enable submissions.",
+      "spamBlocked": "Submission blocked by spam protection.",
+      "tooFast": "Please wait a few seconds before submitting the form.",
+      "cooldown": "Please wait {seconds} seconds before submitting again."
+    },
+    "info": {
+      "title": "Contact Information",
+      "address": "Address",
+      "fullAddress": "Tehran, Vanak Square, Molasadra Street, Shad Street, Baghsara Alley, Building 13, Unit 3",
+      "phone": "Phone",
+      "email": "Email",
+      "workingHours": "Working Hours",
+      "workingHoursText": "Sat - Wed: 8 AM - 5 PM",
+      "phoneValue": "+98 21 8866 0928",
+      "emailValue": "info@isam-tech.com"
+    }
+  },
+  "footer": {
+    "description": "ISAM delivers industrial intelligence, advanced analytics, and decision support solutions.",
+    "quickLinks": "Quick Links",
+    "contactUs": "Legal Pages",
+    "followUs": "Follow Us",
+    "copyright": "All Rights Reserved"
+  },
+  "cookie": {
+    "title": "Cookie Preferences",
+    "description": "We use essential and optional cookies to improve performance and understand user behavior.",
+    "accept": "Accept All",
+    "reject": "Necessary Only",
+    "settings": "Manage Settings",
+    "save": "Save Preferences",
+    "necessary": "Necessary Cookies",
+    "necessaryDesc": "Required for core website functionality and cannot be switched off.",
+    "analytics": "Analytics Cookies",
+    "analyticsDesc": "Help us understand traffic and usage patterns to improve the experience.",
+    "marketing": "Marketing Cookies",
+    "marketingDesc": "Used to deliver relevant communication and campaign content.",
+    "policyPrefix": "Read more in",
+    "policyLinkPrivacy": "Privacy Policy",
+    "policyAnd": "and",
+    "policyLinkData": "Data Privacy",
+    "on": "ON",
+    "off": "OFF",
+    "close": "Close",
+    "back": "Back"
+  },
+  "legal": {
+    "lastUpdatedDate": "February 2026"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated",
+    "intro": "This policy explains how ISAM collects, uses, stores, and protects user information on its website.",
+    "sections": [
+      {
+        "title": "1. Scope and Definitions",
+        "text": "This policy applies to website users of ISAM. Personal data means any information that directly or indirectly identifies an individual."
+      },
+      {
+        "title": "2. Data We May Collect",
+        "text": "Information provided through forms (name, email, phone), technical data such as IP and browser type, and behavior data associated with cookies."
+      },
+      {
+        "title": "3. Processing Purposes",
+        "text": "Service delivery, request handling, user-experience improvement, website performance analysis, and internal decision-support quality enhancement."
+      },
+      {
+        "title": "4. Legal Basis",
+        "text": "Data processing is based on user consent, service necessity, legal obligations, and legitimate business interest."
+      },
+      {
+        "title": "5. Information Sharing",
+        "text": "ISAM does not sell personal data. Data is shared only with authorized service providers and lawful authorities when legally required."
+      },
+      {
+        "title": "6. Retention and Security",
+        "text": "Data is retained only as needed and protected through access controls, event logging, security policies, and technical safeguards."
+      },
+      {
+        "title": "7. User Rights",
+        "text": "Users may request access, correction, restriction, or deletion of personal data and may object to specific processing activities."
+      },
+      {
+        "title": "8. Cookies",
+        "text": "Necessary cookies are always active. Analytics and marketing cookies are enabled only based on user preferences in the cookie panel."
+      },
+      {
+        "title": "9. Contact",
+        "text": "For privacy-related requests or questions, contact privacy@isam-tech.com or write to us at: Tehran, Vanak Square, Molasadra Street, Shad Street, Baghsara Alley, Building 13, Unit 3."
+      }
+    ]
+  },
+  "dataPrivacy": {
+    "title": "Data Privacy",
+    "lastUpdated": "Last Updated",
+    "intro": "This document describes how ISAM processes, stores, secures, and governs personal and operational data in service delivery.",
+    "sections": [
+      {
+        "title": "1. Data Categories",
+        "text": "Personal data (name, email, phone) and industrial operational data (process indicators, equipment signals) may be processed as part of services."
+      },
+      {
+        "title": "2. Processing Principles",
+        "text": "Data minimization, transparency, accuracy, purpose limitation, and proportional retention are the core principles of our processing model."
+      },
+      {
+        "title": "3. Technical and Organizational Security",
+        "text": "We implement encryption in transit, role-based access control, periodic security reviews, controlled backup strategy, and team training."
+      },
+      {
+        "title": "4. Retention and Deletion",
+        "text": "Data is retained only for required operational or legal timeframes, then securely deleted or anonymized."
+      },
+      {
+        "title": "5. International Transfers",
+        "text": "When cross-border transfer is required, contractual and technical safeguards are applied to maintain privacy obligations."
+      },
+      {
+        "title": "6. Data Subject Rights",
+        "text": "Users can request access, correction, deletion, restriction, portability, and objection related to personal data processing."
+      },
+      {
+        "title": "7. Security Incident Handling",
+        "text": "For incidents affecting data, we run documented response, mitigation, and communication workflows aligned with legal requirements."
+      },
+      {
+        "title": "8. Data Protection Contact",
+        "text": "For data processing inquiries, contact dpo@isam-tech.com or write to us at: Tehran, Vanak Square, Molasadra Street, Shad Street, Baghsara Alley, Building 13, Unit 3."
+      }
+    ]
+  },
+  "pages": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "dataPrivacy": "Data Privacy"
+  },
+  "notFound": {
+    "message": "The page you're looking for doesn't exist.",
+    "backHome": "Back to Home"
+  }
+}

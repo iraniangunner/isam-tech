@@ -1,0 +1,24 @@
+{
+  "name": "isam-website-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "axios": "^1.13.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.13.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.3",
+    "vite": "^7.3.1"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build:sitemap": "node scripts/generate-sitemap.mjs",
+    "build:vite": "vite build",
+    "prerender": "node scripts/prerender-routes.mjs",
+    "build": "npm run build:sitemap && npm run build:vite && npm run prerender",
+    "preview": "vite preview"
+  }
+}
