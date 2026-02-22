@@ -1,238 +1,320 @@
-/* Dashboard.css */
+/* ─────────────────────────────────────────────────────────────────────────────
+   Dashboard.css
+   Global design tokens + page-level layout.
+   Load fonts in your root index.html:
+   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+───────────────────────────────────────────────────────────────────────────── */
 
-.dashboard {
-  min-height: 100vh;
-  background: #f0f2f5;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+:root {
+  /* Shared tokens (consumed by Sidebar.css and DataTable.css too) */
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --border: #e8eaed;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --blue: #3b82f6;
+  --blue-bg: #eff6ff;
+  --amber: #f59e0b;
+  --amber-bg: #fffbeb;
+  --green: #10b981;
+  --green-bg: #ecfdf5;
+  --purple: #8b5cf6;
+  --purple-bg: #f5f3ff;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* Layout */
+  --sidebar-w: 240px;
+  --sidebar-w-sm: 64px;
+  --topbar-h: 60px;
+  --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Navbar */
-.dashboard-nav {
-  background: #ffffff;
-  padding: 0 32px;
-  height: 64px;
+/* ── Base ──────────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  color: var(--text-primary);
+}
+
+/* ── Main area shifts right when sidebar is open ───────────────────────────── */
+.main-area {
+  flex: 1;
+  margin-left: var(--sidebar-w-sm); /* matches collapsed sidebar width */
+  transition: margin-left var(--transition);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-shell--open .main-area {
+  margin-left: var(--sidebar-w); /* matches open sidebar width */
+}
+
+/* ── Topbar ────────────────────────────────────────────────────────────────── */
+.topbar {
+  height: var(--topbar-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 0 28px;
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: var(--shadow-sm);
 }
 
-.nav-brand {
-  font-size: 20px;
+.topbar__left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.topbar__title {
+  font-size: 16px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.topbar__subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.topbar__refresh {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  font-size: 17px;
+  color: var(--text-secondary);
+  display: grid;
+  place-items: center;
+  transition: background var(--transition), color var(--transition),
+    transform 0.3s ease;
+}
+.topbar__refresh:hover {
+  background: var(--bg);
+  color: var(--text-primary);
+  transform: rotate(90deg);
+}
+
+/* ── Content ───────────────────────────────────────────────────────────────── */
+.content {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+}
+
+/* ── Stats grid ────────────────────────────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Colored left border per accent */
+.stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: 2px 0 0 2px;
+}
+.accent-blue::before {
+  background: var(--blue);
+}
+.accent-amber::before {
+  background: var(--amber);
+}
+.accent-green::before {
+  background: var(--green);
+}
+.accent-purple::before {
+  background: var(--purple);
+}
+
+.stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.accent-blue .stat-icon {
+  background: var(--blue-bg);
+  color: var(--blue);
+}
+.accent-amber .stat-icon {
+  background: var(--amber-bg);
+  color: var(--amber);
+}
+.accent-green .stat-icon {
+  background: var(--green-bg);
+  color: var(--green);
+}
+.accent-purple .stat-icon {
+  background: var(--purple-bg);
+  color: var(--purple);
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  font-family: "DM Mono", monospace;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+/* ── Shared cell styles used inside DataTable column renderers ─────────────── */
+.sender-cell {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.nav-brand span {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  /* -webkit-background-clip: text; */
-  -webkit-text-fill-color: transparent;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.nav-user {
-  color: #555;
-  font-size: 14px;
-}
-
-.nav-user strong {
-  color: #1a1a2e;
-}
-
-.logout-btn {
-  background: #fff0f0;
-  border: 1px solid #ffcdd2;
-  border-radius: 8px;
-  padding: 8px 16px;
-  color: #e53935;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.logout-btn:hover {
-  background: #e53935;
-  color: white;
-  border-color: #e53935;
-}
-
-/* Content */
-.dashboard-content {
-  padding: 32px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.dashboard-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #1a1a2e;
-  margin-bottom: 8px;
-}
-
-.dashboard-subtitle {
-  color: #888;
-  font-size: 14px;
-  margin-bottom: 28px;
-}
-
-/* Stats */
-.stats-row {
+.sender-cell__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a5b4fc, #818cf8);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-bottom: 32px;
-}
-
-.stat-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.stat-label {
-  color: #888;
+  place-items: center;
   font-size: 13px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
-}
-
-.stat-value {
-  font-size: 32px;
-  font-weight: 700;
-  color: #1a1a2e;
-}
-
-/* Messages Table */
-.messages-card {
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-}
-
-.messages-card-header {
-  padding: 20px 24px;
-  border-bottom: 1px solid #f0f0f0;
-  font-size: 16px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: #fff;
+  flex-shrink: 0;
 }
 
-.messages-table {
-  width: 100%;
-  border-collapse: collapse;
+.sender-cell__name {
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
 }
-
-.messages-table th {
-  background: #fafafa;
-  padding: 12px 20px;
-  text-align: left;
+.sender-cell__email {
   font-size: 12px;
-  font-weight: 600;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.messages-table td {
-  padding: 16px 20px;
-  border-bottom: 1px solid #f8f8f8;
-  font-size: 14px;
-  color: #333;
-  vertical-align: top;
-}
-
-.messages-table tr:hover td {
-  background: #fafbff;
-}
-
-.messages-table tr:last-child td {
-  border-bottom: none;
-}
-
-.message-name {
-  font-weight: 600;
-  color: #1a1a2e;
-}
-
-.message-email {
-  color: #667eea;
-  font-size: 13px;
-}
-
-.message-text {
-  color: #555;
-  max-width: 400px;
-  line-height: 1.5;
-}
-
-.message-date {
-  color: #aaa;
-  font-size: 13px;
+  color: var(--blue);
+  margin-top: 1px;
   white-space: nowrap;
 }
 
+.msg-preview {
+  color: var(--text-secondary);
+  max-width: 360px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Status badge */
 .status-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
-.status-unread {
-  background: #fff3e0;
-  color: #e65100;
+.status-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
 }
 
-.status-read {
-  background: #e8f5e9;
-  color: #2e7d32;
+.status-badge--new {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+.status-badge--new .status-badge__dot {
+  background: #3b82f6;
+}
+.status-badge--unread {
+  background: #fff7ed;
+  color: #c2410c;
+}
+.status-badge--unread .status-badge__dot {
+  background: #f97316;
+}
+.status-badge--read {
+  background: #f0fdf4;
+  color: #166534;
+}
+.status-badge--read .status-badge__dot {
+  background: #22c55e;
 }
 
-/* Empty / Loading */
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: #aaa;
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
-.empty-state p {
-  font-size: 16px;
-  margin-top: 12px;
-}
-
-.table-loading {
-  text-align: center;
-  padding: 40px;
-  color: #aaa;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .dashboard-content {
+@media (max-width: 640px) {
+  .content {
     padding: 16px;
   }
-
-  .messages-table th:nth-child(4),
-  .messages-table td:nth-child(4) {
-    display: none;
+  .topbar {
+    padding: 0 16px;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
 }
