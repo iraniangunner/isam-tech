@@ -3,15 +3,26 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 
+import {
+  Mail,
+  User,
+  BarChart2,
+  Settings,
+  RefreshCw,
+  MessagesSquare,
+  MailOpen,
+  TrendingUp,
+} from "lucide-react";
+
 import Sidebar from "../../components/admin/Sidebar/Sidebar";
-import DataTable from "../../components/admin/Datatable/Datatable";
+import DataTable from "../../components/admin/DataTable/DataTable";
 import "./Dashboard.css";
 
 const NAV_ITEMS = [
-  { id: "messages", icon: "✉", label: "Messages" },
-  { id: "users", icon: "👤", label: "Users" },
-  { id: "analytics", icon: "◈", label: "Analytics" },
-  { id: "settings", icon: "⚙", label: "Settings" },
+  { id: "messages", icon: <Mail size={16} />, label: "Messages" },
+  { id: "users", icon: <User size={16} />, label: "Users" },
+  { id: "analytics", icon: <BarChart2 size={16} />, label: "Analytics" },
+  { id: "settings", icon: <Settings size={16} />, label: "Settings" },
 ];
 
 const StatCard = ({ label, value, icon, accent }) => (
@@ -56,6 +67,7 @@ const MESSAGE_COLUMNS = [
     key: "status",
     header: "Status",
     width: "120px",
+    hideInView: true, // ← hidden from view modal
     render: (v) => <StatusBadge status={v} />,
   },
   {
@@ -93,20 +105,12 @@ const Dashboard = () => {
     try {
       const res = await api.get(`/admin/contact?page=${page}`);
 
-      // Your API returns either:
-      //   res.data = { data: { current_page, data: [...], last_page, total } }
-      // or:
-      //   res.data = { current_page, data: [...], last_page, total }
-      // This handles both:
       const payload = res.data?.data ?? res.data;
       const rows = Array.isArray(payload?.data)
         ? payload.data
         : Array.isArray(payload)
-        ? payload
-        : [];
-
-      console.log("[Dashboard] raw res.data:", res.data);
-      console.log("[Dashboard] rows extracted:", rows);
+          ? payload
+          : [];
 
       setMessages(rows);
       setCurrentPage(payload?.current_page ?? 1);
@@ -124,6 +128,23 @@ const Dashboard = () => {
     fetchMessages(1);
   }, [fetchMessages]);
 
+  // Called after DataTable confirms deletion — sync with the server
+  const handleDeleteMessage = useCallback(
+    async (row) => {
+      try {
+        await api.delete(`/admin/contact/${row.id}`);
+        const pageToLoad =
+          messages.length === 1 && currentPage > 1
+            ? currentPage - 1
+            : currentPage;
+        fetchMessages(pageToLoad);
+      } catch (err) {
+        console.error("Failed to delete message:", err);
+      }
+    },
+    [messages.length, currentPage, fetchMessages],
+  );
+
   const handleLogout = async () => {
     await logout();
     navigate("/login");
@@ -133,7 +154,7 @@ const Dashboard = () => {
   const read = messages.filter((m) => m.status === "read").length;
 
   const navItemsWithBadges = NAV_ITEMS.map((item) =>
-    item.id === "messages" ? { ...item, badge: newMsgs } : item
+    item.id === "messages" ? { ...item, badge: newMsgs } : item,
   );
 
   return (
@@ -162,26 +183,41 @@ const Dashboard = () => {
             onClick={() => fetchMessages(currentPage)}
             title="Refresh"
           >
-            ↻
+            <RefreshCw size={16} />
           </button>
         </header>
 
         <main className="content">
           <div className="stats-grid">
-            <StatCard label="Total" value={total} icon="✉" accent="blue" />
-            <StatCard label="New" value={newMsgs} icon="◉" accent="amber" />
-            <StatCard label="Read" value={read} icon="◎" accent="green" />
+            <StatCard
+              label="Total"
+              value={total}
+              icon={<Mail size={20} />}
+              accent="blue"
+            />
+            <StatCard
+              label="New"
+              value={newMsgs}
+              icon={<MessagesSquare size={20} />}
+              accent="amber"
+            />
+            <StatCard
+              label="Read"
+              value={read}
+              icon={<MailOpen size={20} />}
+              accent="green"
+            />
             <StatCard
               label="Response Rate"
               value={total ? `${Math.round((read / total) * 100)}%` : "—"}
-              icon="◈"
+              icon={<TrendingUp size={20} />}
               accent="purple"
             />
           </div>
 
           <DataTable
             title="All Messages"
-            icon="✉"
+            icon={<Mail size={15} />}
             columns={MESSAGE_COLUMNS}
             data={messages}
             loading={loading}
@@ -189,7 +225,9 @@ const Dashboard = () => {
             searchKeys={["name", "email", "subject"]}
             emptyMessage="No messages yet"
             rowKey="id"
-            // Server-side pagination props
+            rowLabelKey="name"
+            rowActions={["view", "delete"]}
+            onDelete={handleDeleteMessage}
             serverPagination
             currentPage={currentPage}
             lastPage={lastPage}

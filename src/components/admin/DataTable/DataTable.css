@@ -85,7 +85,9 @@
   background: var(--bg, #f5f6fa);
   font-family: inherit;
   width: 220px;
-  transition: border-color 200ms ease, box-shadow 200ms ease;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease;
   outline: none;
 }
 
@@ -191,6 +193,49 @@
   width: 48px;
 }
 
+/* ── Row action buttons ────────────────────────────────────────────────────── */
+.dt-td--actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: flex-end;
+}
+
+.dt-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border, #e8eaed);
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-muted, #9ca3af);
+  transition: all 160ms ease;
+  line-height: 1;
+}
+.dt-action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.dt-action-btn--view:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+.dt-action-btn--edit:hover {
+  background: #f5f3ff;
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+}
+.dt-action-btn--delete:hover {
+  background: #fff1f2;
+  border-color: #f43f5e;
+  color: #f43f5e;
+}
+
 /* ── Pagination ────────────────────────────────────────────────────────────── */
 .dt-pagination {
   padding: 12px 22px;
@@ -227,7 +272,10 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+  transition:
+    background 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
 }
 
 .dt-page-btn:hover:not(:disabled) {
@@ -293,6 +341,403 @@
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODAL SYSTEM
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* Backdrop */
+.dt-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: dt-backdropIn 0.2s ease;
+}
+.dt-backdrop--exit {
+  animation: dt-backdropOut 0.18s ease forwards;
+}
+@keyframes dt-backdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dt-backdropOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Modal shell */
+.dt-modal {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e8eaed);
+  border-radius: 16px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.14),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 460px;
+  overflow: hidden;
+  animation: dt-modalIn 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.dt-backdrop--exit .dt-modal {
+  animation: dt-modalOut 0.18s ease forwards;
+}
+@keyframes dt-modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.88) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+@keyframes dt-modalOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+}
+
+/* Modal header */
+.dt-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--border, #e8eaed);
+}
+.dt-modal__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dt-modal__badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.dt-modal__badge--view {
+  background: #eff6ff;
+}
+.dt-modal__badge--edit {
+  background: #f5f3ff;
+}
+.dt-modal__badge--delete {
+  background: #fff1f2;
+}
+
+.dt-modal__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+}
+.dt-modal__close {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border, #e8eaed);
+  background: transparent;
+  color: var(--text-muted, #9ca3af);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms ease;
+  line-height: 1;
+}
+.dt-modal__close:hover {
+  background: #fff1f2;
+  border-color: #f43f5e;
+  color: #f43f5e;
+}
+
+/* Modal body */
+.dt-modal__body {
+  padding: 18px 20px;
+}
+
+/* Modal footer */
+.dt-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--border, #e8eaed);
+  background: #fafbfc;
+}
+
+/* Buttons */
+.dt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 16px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 160ms ease;
+}
+.dt-btn:active {
+  transform: scale(0.97);
+}
+
+.dt-btn--ghost {
+  background: transparent;
+  border-color: var(--border, #e8eaed);
+  color: var(--text-secondary, #6b7280);
+}
+.dt-btn--ghost:hover {
+  background: var(--bg, #f5f6fa);
+  color: var(--text-primary, #111827);
+}
+.dt-btn--primary {
+  background: var(--blue, #3b82f6);
+  border-color: var(--blue, #3b82f6);
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.3);
+}
+.dt-btn--primary:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  box-shadow: 0 3px 10px rgba(59, 130, 246, 0.35);
+}
+.dt-btn--danger {
+  background: #f43f5e;
+  border-color: #f43f5e;
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(244, 63, 94, 0.3);
+}
+.dt-btn--danger:hover {
+  background: #e11d48;
+  border-color: #e11d48;
+  box-shadow: 0 3px 10px rgba(244, 63, 94, 0.35);
+}
+
+/* ── View modal: field grid ─────────────────────────────────────────────── */
+.dt-view-grid {
+  display: grid;
+  gap: 8px;
+}
+.dt-view-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 12px;
+  background: var(--bg, #f5f6fa);
+  border: 1px solid var(--border, #e8eaed);
+  border-radius: 8px;
+  animation: dt-fieldSlide 0.18s ease backwards;
+}
+.dt-view-field:nth-child(1) {
+  animation-delay: 0.03s;
+}
+.dt-view-field:nth-child(2) {
+  animation-delay: 0.06s;
+}
+.dt-view-field:nth-child(3) {
+  animation-delay: 0.09s;
+}
+.dt-view-field:nth-child(4) {
+  animation-delay: 0.12s;
+}
+.dt-view-field:nth-child(5) {
+  animation-delay: 0.15s;
+}
+.dt-view-field:nth-child(6) {
+  animation-delay: 0.18s;
+}
+@keyframes dt-fieldSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.dt-view-field__label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-muted, #9ca3af);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.dt-view-field__value {
+  font-size: 13.5px;
+  color: var(--text-primary, #111827);
+  word-break: break-all;
+}
+
+/* ── Edit modal: form ───────────────────────────────────────────────────── */
+.dt-edit-form {
+  display: grid;
+  gap: 12px;
+}
+.dt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.dt-field label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted, #9ca3af);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.dt-field input,
+.dt-field select,
+.dt-field textarea {
+  padding: 8px 11px;
+  border: 1px solid var(--border, #e8eaed);
+  border-radius: 7px;
+  font-size: 13.5px;
+  color: var(--text-primary, #111827);
+  background: var(--bg, #f5f6fa);
+  font-family: inherit;
+  outline: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+  width: 100%;
+}
+.dt-field input:focus,
+.dt-field select:focus,
+.dt-field textarea:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+  background: var(--surface, #fff);
+}
+
+/* ── Delete modal: warning ──────────────────────────────────────────────── */
+.dt-delete-warning {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 6px 0 2px;
+}
+.dt-delete-warning__icon {
+  font-size: 2.6rem;
+  line-height: 1;
+  animation: dt-wobble 0.5s ease 0.1s both;
+}
+@keyframes dt-wobble {
+  0% {
+    transform: rotate(0deg) scale(0.7);
+  }
+  40% {
+    transform: rotate(-10deg) scale(1.15);
+  }
+  65% {
+    transform: rotate(7deg) scale(1);
+  }
+  80% {
+    transform: rotate(-4deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+.dt-delete-warning__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+}
+.dt-delete-warning__sub {
+  font-size: 13px;
+  color: var(--text-muted, #9ca3af);
+  line-height: 1.5;
+  max-width: 300px;
+}
+.dt-delete-warning__chip {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #f43f5e;
+  border-radius: 6px;
+  padding: 3px 12px;
+  font-size: 12.5px;
+  font-weight: 500;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Toast ─────────────────────────────────────────────────────────────── */
+.dt-toast-wrap {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+.dt-toast {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  border: 1px solid;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  pointer-events: all;
+  animation: dt-toastIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.dt-toast--success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #16a34a;
+}
+.dt-toast--danger {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #f43f5e;
+}
+@keyframes dt-toastIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .dt-card__header {
@@ -307,5 +752,8 @@
   }
   .dt-search {
     width: 100%;
+  }
+  .dt-modal {
+    max-width: 100%;
   }
 }
