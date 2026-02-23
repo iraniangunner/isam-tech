@@ -316,8 +316,9 @@ const DataTable = ({
     columns.find((c) => c.key !== "id" && c.key !== rowKey)?.key ??
     rowKey;
 
-  // ── Filter (client-side only) ────────────────────────────────────────────
+  // ── Filter (client-side only — skipped entirely when serverSearch=true) ────
   const filtered = useMemo(() => {
+    if (serverSearch) return data;      // server handles filtering, skip client filter
     if (!search.trim()) return data;
     const q = search.toLowerCase();
     return data.filter((row) =>
@@ -327,7 +328,7 @@ const DataTable = ({
           .includes(q),
       ),
     );
-  }, [data, search, searchKeys, columns]);
+  }, [data, search, searchKeys, columns, serverSearch]);
 
   // ── Sort (client-side only) ──────────────────────────────────────────────
   const sorted = useMemo(() => {

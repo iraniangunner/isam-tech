@@ -263,7 +263,7 @@ const Messages = () => {
           // Server-side search — DataTable fires onSearch instead of filtering locally
           searchable
           serverSearch
-          searchValue={inputValue}
+          searchValue={inputValue}   // instant — shows what user is typing right now
           onSearch={(q) => setInputValue(q)}
           emptyMessage="No messages yet"
           rowKey="id"
