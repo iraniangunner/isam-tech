@@ -157,14 +157,67 @@ function ViewModal({ row, columns, onClose, exiting }) {
 
 /* ─────────────────────────────────────────────────────────────────────────────
    MODAL: EDIT
+   Column edit config (all optional):
+     editType     — "text" (default) | "textarea" | "select" | "date" | "readonly"
+     editOptions  — [{ value, label }]  required when editType="select"
+     hideInEdit   — true → field is excluded from the edit form entirely
+     fullWidth    — true → field spans full width in the form
 ───────────────────────────────────────────────────────────────────────────── */
+function EditField({ col, value, onChange }) {
+  const id = `edit-${col.key}`;
+  const base = { id, value: value ?? "", onChange };
+
+  if (col.editType === "readonly") {
+    return (
+      <div className="dt-field-readonly">
+        {value != null ? String(value) : "—"}
+      </div>
+    );
+  }
+
+  if (col.editType === "textarea") {
+    return (
+      <textarea
+        {...base}
+        rows={4}
+        placeholder={`Enter ${col.header.toLowerCase()}…`}
+      />
+    );
+  }
+
+  if (col.editType === "select") {
+    return (
+      <select {...base}>
+        <option value="">— select —</option>
+        {(col.editOptions ?? []).map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label ?? opt.value}
+          </option>
+        ))}
+      </select>
+    );
+  }
+
+  // default: text / date / email / number — pass editType directly as type
+  return (
+    <input
+      {...base}
+      type={["date", "email", "number", "password"].includes(col.editType) ? col.editType : "text"}
+      placeholder={`Enter ${col.header.toLowerCase()}…`}
+    />
+  );
+}
+
 function EditModal({ row, columns, onClose, onSave, exiting }) {
-  const editableCols = columns.filter((c) => c.key !== "__actions");
+  const editableCols = columns.filter(
+    (c) => c.key !== "__actions" && !c.hideInEdit,
+  );
   const [form, setForm] = useState(() =>
     Object.fromEntries(editableCols.map((c) => [c.key, row[c.key] ?? ""])),
   );
 
-  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  const handleChange = (key) => (e) =>
+    setForm((f) => ({ ...f, [key]: e.target.value }));
 
   return (
     <Backdrop exiting={exiting} onClose={onClose}>
@@ -184,13 +237,15 @@ function EditModal({ row, columns, onClose, onSave, exiting }) {
         <div className="dt-modal__body">
           <div className="dt-edit-form">
             {editableCols.map((col) => (
-              <div className="dt-field" key={col.key}>
+              <div
+                className={`dt-field${col.fullWidth ? " dt-field--full" : ""}`}
+                key={col.key}
+              >
                 <label htmlFor={`edit-${col.key}`}>{col.header}</label>
-                <input
-                  id={`edit-${col.key}`}
+                <EditField
+                  col={col}
                   value={form[col.key]}
-                  onChange={set(col.key)}
-                  placeholder={`Enter ${col.header.toLowerCase()}…`}
+                  onChange={handleChange(col.key)}
                 />
               </div>
             ))}

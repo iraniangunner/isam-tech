@@ -216,7 +216,7 @@
 }
 .dt-action-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 .dt-action-btn--view:hover {
   background: #eff6ff;
@@ -327,9 +327,7 @@
 }
 
 @keyframes dt-spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -353,22 +351,8 @@
 .dt-backdrop--exit {
   animation: dt-backdropOut 0.18s ease forwards;
 }
-@keyframes dt-backdropIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes dt-backdropOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
+@keyframes dt-backdropIn  { from { opacity: 0 } to { opacity: 1 } }
+@keyframes dt-backdropOut { from { opacity: 1 } to { opacity: 0 } }
 
 /* Modal shell */
 .dt-modal {
@@ -385,24 +369,12 @@
   animation: dt-modalOut 0.18s ease forwards;
 }
 @keyframes dt-modalIn {
-  from {
-    opacity: 0;
-    transform: scale(0.88) translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+  from { opacity: 0; transform: scale(0.88) translateY(16px) }
+  to   { opacity: 1; transform: scale(1) translateY(0) }
 }
 @keyframes dt-modalOut {
-  from {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.92) translateY(10px);
-  }
+  from { opacity: 1; transform: scale(1) translateY(0) }
+  to   { opacity: 0; transform: scale(0.92) translateY(10px) }
 }
 
 /* Modal header */
@@ -428,15 +400,9 @@
   font-size: 15px;
   flex-shrink: 0;
 }
-.dt-modal__badge--view {
-  background: #eff6ff;
-}
-.dt-modal__badge--edit {
-  background: #f5f3ff;
-}
-.dt-modal__badge--delete {
-  background: #fff1f2;
-}
+.dt-modal__badge--view   { background: #eff6ff; }
+.dt-modal__badge--edit   { background: #f5f3ff; }
+.dt-modal__badge--delete { background: #fff1f2; }
 
 .dt-modal__title {
   font-size: 15px;
@@ -492,9 +458,7 @@
   border: 1px solid transparent;
   transition: all 160ms ease;
 }
-.dt-btn:active {
-  transform: scale(0.97);
-}
+.dt-btn:active { transform: scale(0.97); }
 
 .dt-btn--ghost {
   background: transparent;
@@ -509,23 +473,23 @@
   background: var(--blue, #3b82f6);
   border-color: var(--blue, #3b82f6);
   color: #fff;
-  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 1px 4px rgba(59,130,246,0.3);
 }
 .dt-btn--primary:hover {
   background: #2563eb;
   border-color: #2563eb;
-  box-shadow: 0 3px 10px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 3px 10px rgba(59,130,246,0.35);
 }
 .dt-btn--danger {
   background: #f43f5e;
   border-color: #f43f5e;
   color: #fff;
-  box-shadow: 0 1px 4px rgba(244, 63, 94, 0.3);
+  box-shadow: 0 1px 4px rgba(244,63,94,0.3);
 }
 .dt-btn--danger:hover {
   background: #e11d48;
   border-color: #e11d48;
-  box-shadow: 0 3px 10px rgba(244, 63, 94, 0.35);
+  box-shadow: 0 3px 10px rgba(244,63,94,0.35);
 }
 
 /* ── View modal: field grid ─────────────────────────────────────────────── */
@@ -543,33 +507,15 @@
   border-radius: 8px;
   animation: dt-fieldSlide 0.18s ease backwards;
 }
-.dt-view-field:nth-child(1) {
-  animation-delay: 0.03s;
-}
-.dt-view-field:nth-child(2) {
-  animation-delay: 0.06s;
-}
-.dt-view-field:nth-child(3) {
-  animation-delay: 0.09s;
-}
-.dt-view-field:nth-child(4) {
-  animation-delay: 0.12s;
-}
-.dt-view-field:nth-child(5) {
-  animation-delay: 0.15s;
-}
-.dt-view-field:nth-child(6) {
-  animation-delay: 0.18s;
-}
+.dt-view-field:nth-child(1) { animation-delay: 0.03s }
+.dt-view-field:nth-child(2) { animation-delay: 0.06s }
+.dt-view-field:nth-child(3) { animation-delay: 0.09s }
+.dt-view-field:nth-child(4) { animation-delay: 0.12s }
+.dt-view-field:nth-child(5) { animation-delay: 0.15s }
+.dt-view-field:nth-child(6) { animation-delay: 0.18s }
 @keyframes dt-fieldSlide {
-  from {
-    opacity: 0;
-    transform: translateX(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-6px) }
+  to   { opacity: 1; transform: translateX(0) }
 }
 .dt-view-field__label {
   font-size: 10.5px;
@@ -618,16 +564,32 @@
   background: var(--bg, #f5f6fa);
   font-family: inherit;
   outline: none;
-  transition: border-color 180ms ease, box-shadow 180ms ease,
-    background 180ms ease;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
   width: 100%;
 }
 .dt-field input:focus,
 .dt-field select:focus,
 .dt-field textarea:focus {
   border-color: #8b5cf6;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+  box-shadow: 0 0 0 3px rgba(139,92,246,0.12);
   background: var(--surface, #fff);
+}
+.dt-field textarea { resize: vertical; min-height: 80px; }
+
+/* Full-width field — spans both columns in the 2-col edit grid */
+.dt-edit-form { grid-template-columns: 1fr 1fr; }
+.dt-field--full { grid-column: 1 / -1; }
+
+/* Read-only field — looks like a value chip, not an input */
+.dt-field-readonly {
+  padding: 8px 11px;
+  border: 1px solid var(--border, #e8eaed);
+  border-radius: 7px;
+  font-size: 13.5px;
+  color: var(--text-muted, #9ca3af);
+  background: var(--bg, #f5f6fa);
+  font-style: italic;
+  user-select: none;
 }
 
 /* ── Delete modal: warning ──────────────────────────────────────────────── */
@@ -647,21 +609,11 @@
   animation: dt-wobble 0.5s ease 0.1s both;
 }
 @keyframes dt-wobble {
-  0% {
-    transform: rotate(0deg) scale(0.7);
-  }
-  40% {
-    transform: rotate(-10deg) scale(1.15);
-  }
-  65% {
-    transform: rotate(7deg) scale(1);
-  }
-  80% {
-    transform: rotate(-4deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
+  0%   { transform: rotate(0deg) scale(0.7) }
+  40%  { transform: rotate(-10deg) scale(1.15) }
+  65%  { transform: rotate(7deg) scale(1) }
+  80%  { transform: rotate(-4deg) }
+  100% { transform: rotate(0deg) }
 }
 .dt-delete-warning__title {
   font-size: 15px;
@@ -709,7 +661,7 @@
   font-weight: 500;
   font-family: "DM Sans", "Segoe UI", system-ui, sans-serif;
   border: 1px solid;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   pointer-events: all;
   animation: dt-toastIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -724,14 +676,8 @@
   color: #f43f5e;
 }
 @keyframes dt-toastIn {
-  from {
-    opacity: 0;
-    transform: translateX(30px) scale(0.92);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+  from { opacity: 0; transform: translateX(30px) scale(0.92) }
+  to   { opacity: 1; transform: none }
 }
 
 /* ── Responsive ────────────────────────────────────────────────────────────── */
@@ -752,4 +698,16 @@
   .dt-modal {
     max-width: 100%;
   }
+}
+
+/* ── Sender cell email link ─────────────────────────────────────────────────── */
+.sender-cell__email--link {
+  color: var(--text-muted, #9ca3af);
+  text-decoration: none;
+  font-size: inherit;
+  transition: color 150ms ease;
+}
+.sender-cell__email--link:hover {
+  color: var(--blue, #3b82f6);
+  text-decoration: underline;
 }
