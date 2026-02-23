@@ -46,7 +46,7 @@ function App() {
           }
         >
           {/* /admin → redirect to /admin/dashboard */}
-          <Route index element={<Navigate to="dashboard" replace />} />
+          {/* <Route index element={<Navigate to="dashboard" replace />} /> */}
 
           {/* /admin/dashboard — home/overview page */}
           <Route

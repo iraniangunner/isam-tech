@@ -1,11 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useCallback, useReducer, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import api from "../../../api/axios";
 import {
-  Mail,
-  MessagesSquare,
-  MailOpen,
-  TrendingUp,
-  RefreshCw,
+  Mail, MessagesSquare, MailOpen, TrendingUp, RefreshCw,
 } from "lucide-react";
 import DataTable from "../../../components/admin/DataTable/DataTable";
 import "./Messages.css";
@@ -84,68 +81,147 @@ const MESSAGE_COLUMNS = [
   },
 ];
 
+// ── Custom hook: all state lives in the URL ───────────────────────────────────
+function useMessageParams() {
+  const [params, setParams] = useSearchParams();
+
+  const page   = parseInt(params.get("page")   ?? "1",  10);
+  const search = params.get("search") ?? "";
+  const sortBy = params.get("sort")   ?? "";
+  const sortDir= params.get("dir")    ?? "desc";
+
+  const set = (updates) =>
+    setParams((prev) => {
+      const next = new URLSearchParams(prev);
+      Object.entries(updates).forEach(([k, v]) => {
+        if (v === "" || v == null) next.delete(k);
+        else next.set(k, String(v));
+      });
+      if ("search" in updates || "sort" in updates) next.set("page", "1");
+      return next;
+    });
+
+  return { page, search, sortBy, sortDir, set };
+}
+
+// ── Debounce hook ─────────────────────────────────────────────────────────────
+function useDebounce(value, delay = 400) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return debounced;
+}
+// ── Reducer (defined outside component to avoid hoisting issues) ─────────────
+
+const initialState = {
+  loading: true,
+  messages: [],
+  currentPage: 1,
+  lastPage: 1,
+  total: 0,
+  perPage: 20,
+};
+
+function reducer(s, action) {
+  switch (action.type) {
+    case "LOADING":  return { ...s, loading: true };
+    case "SUCCESS":  return { ...s, loading: false, ...action.payload };
+    case "ERROR":    return { ...s, loading: false };
+    default:         return s;
+  }
+}
+
 // ── Page component ────────────────────────────────────────────────────────────
 
 const Messages = () => {
-  const [messages, setMessages]       = useState([]);
-  const [loading, setLoading]         = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setLastPage]       = useState(1);
-  const [total, setTotal]             = useState(0);
-  const [perPage, setPerPage]         = useState(20);
+  const { page, search: searchParam, sortBy, sortDir, set } = useMessageParams();
 
-  const fetchMessages = useCallback(async (page = 1) => {
-    setLoading(true);
+  // Local input state — debounced before hitting the URL/API
+  const [inputValue, setInputValue] = useState(searchParam);
+  const debouncedSearch = useDebounce(inputValue, 400);
+
+  // Sync debounced value → URL (triggers fetch)
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) { isFirstRender.current = false; return; }
+    set({ search: debouncedSearch });
+  }, [debouncedSearch]); // eslint-disable-line
+
+  // Use URL param as the actual search value sent to API
+  const search = searchParam;
+
+  // Server state
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  // ── Fetch ─────────────────────────────────────────────────────────────────
+  const fetchMessages = useCallback(async () => {
+    dispatch({ type: "LOADING" });
     try {
-      const res     = await api.get(`/admin/contact?page=${page}`);
-      const payload = res.data?.data ?? res.data;
-      const rows    = Array.isArray(payload?.data)
-        ? payload.data
-        : Array.isArray(payload)
-        ? payload
-        : [];
+      const res = await api.get("/admin/contact", {
+        params: {
+          page,
+          ...(search  && { search }),
+          ...(sortBy  && { sort_by: sortBy, sort_dir: sortDir }),
+        },
+      });
 
-      setMessages(rows);
-      setCurrentPage(payload?.current_page ?? 1);
-      setLastPage(payload?.last_page       ?? 1);
-      setTotal(payload?.total              ?? rows.length);
-      setPerPage(payload?.per_page         ?? 20);
+      // API returns Laravel paginator directly at res.data (no extra wrapper)
+      const p = res.data;
+      dispatch({
+        type: "SUCCESS",
+        payload: {
+          messages:    p.data          ?? [],
+          currentPage: p.current_page  ?? 1,
+          lastPage:    p.last_page     ?? 1,
+          total:       p.total         ?? 0,
+          perPage:     p.per_page      ?? 20,
+        },
+      });
     } catch (err) {
       console.error("Failed to fetch messages:", err);
-    } finally {
-      setLoading(false);
+      dispatch({ type: "ERROR" });
     }
-  }, []);
+  }, [page, search, sortBy, sortDir]);
 
-  useEffect(() => { fetchMessages(1); }, [fetchMessages]);
+  useEffect(() => { fetchMessages(); }, [fetchMessages]);
 
-  // Eye click → GET /admin/contact/:id → backend marks as read automatically
+  // ── Handlers ──────────────────────────────────────────────────────────────
   const handleViewMessage = useCallback(async (row) => {
     if (row.status === "read") return;
     try {
       await api.get(`/admin/contact/${row.id}`);
-      setMessages((prev) =>
-        prev.map((m) => (m.id === row.id ? { ...m, status: "read" } : m))
-      );
+      dispatch({
+        type: "SUCCESS",
+        payload: {
+          ...state,
+          messages: state.messages.map((m) =>
+            m.id === row.id ? { ...m, status: "read" } : m
+          ),
+        },
+      });
     } catch (err) {
-      console.error("Failed to fetch message:", err);
+      console.error("Failed to mark as read:", err);
     }
-  }, []);
+  }, [state]);
 
-  // Trash click → confirmed in modal → DELETE /admin/contact/:id
   const handleDeleteMessage = useCallback(async (row) => {
     try {
       await api.delete(`/admin/contact/${row.id}`);
-      const pageToLoad =
-        messages.length === 1 && currentPage > 1 ? currentPage - 1 : currentPage;
-      fetchMessages(pageToLoad);
+      // If last row on page > 1, go back
+      const nextPage =
+        state.messages.length === 1 && page > 1 ? page - 1 : page;
+      set({ page: nextPage });
+      // fetchMessages will auto-run via useEffect on page change
+      if (nextPage === page) fetchMessages();
     } catch (err) {
-      console.error("Failed to delete message:", err);
+      console.error("Failed to delete:", err);
     }
-  }, [messages.length, currentPage, fetchMessages]);
+  }, [state.messages.length, page, set, fetchMessages]);
 
-  const newMsgs = messages.filter((m) => m.status === "new").length;
-  const read    = messages.filter((m) => m.status === "read").length;
+  const newMsgs = state.messages.filter((m) => m.status === "new").length;
+  const read    = state.messages.filter((m) => m.status === "read").length;
 
   return (
     <>
@@ -153,12 +229,12 @@ const Messages = () => {
         <div className="topbar__left">
           <h1 className="topbar__title">Contact Messages</h1>
           <p className="topbar__subtitle">
-            {total} message{total !== 1 ? "s" : ""} total
+            {state.total} message{state.total !== 1 ? "s" : ""} total
           </p>
         </div>
         <button
           className="topbar__refresh"
-          onClick={() => fetchMessages(currentPage)}
+          onClick={fetchMessages}
           title="Refresh"
         >
           <RefreshCw size={16} />
@@ -167,12 +243,12 @@ const Messages = () => {
 
       <main className="content">
         <div className="stats-grid">
-          <StatCard label="Total"   value={total}   icon={<Mail size={20} />}           accent="blue"   />
-          <StatCard label="New"     value={newMsgs} icon={<MessagesSquare size={20} />} accent="amber"  />
-          <StatCard label="Read"    value={read}    icon={<MailOpen size={20} />}        accent="green"  />
+          <StatCard label="Total"   value={state.total}   icon={<Mail size={20} />}           accent="blue"   />
+          <StatCard label="New"     value={newMsgs}       icon={<MessagesSquare size={20} />} accent="amber"  />
+          <StatCard label="Read"    value={read}          icon={<MailOpen size={20} />}        accent="green"  />
           <StatCard
             label="Response Rate"
-            value={total ? `${Math.round((read / total) * 100)}%` : "—"}
+            value={state.total ? `${Math.round((read / state.total) * 100)}%` : "—"}
             icon={<TrendingUp size={20} />}
             accent="purple"
           />
@@ -182,22 +258,26 @@ const Messages = () => {
           title="All Messages"
           icon={<Mail size={15} />}
           columns={MESSAGE_COLUMNS}
-          data={messages}
-          loading={loading}
+          data={state.messages}
+          loading={state.loading}
+          // Server-side search — DataTable fires onSearch instead of filtering locally
           searchable
-          searchKeys={["name", "email", "subject"]}
+          serverSearch
+          searchValue={inputValue}
+          onSearch={(q) => setInputValue(q)}
           emptyMessage="No messages yet"
           rowKey="id"
           rowLabelKey="name"
           rowActions={["view", "delete"]}
           onView={handleViewMessage}
           onDelete={handleDeleteMessage}
+          // Server-side pagination
           serverPagination
-          currentPage={currentPage}
-          lastPage={lastPage}
-          total={total}
-          perPage={perPage}
-          onPageChange={(page) => fetchMessages(page)}
+          currentPage={state.currentPage}
+          lastPage={state.lastPage}
+          total={state.total}
+          perPage={state.perPage}
+          onPageChange={(p) => set({ page: p })}
         />
       </main>
     </>

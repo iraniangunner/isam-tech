@@ -68,7 +68,7 @@ function useModal() {
     setState((s) => ({ ...s, exiting: true }));
     setTimeout(
       () => setState({ open: false, exiting: false, data: null, type: null }),
-      200
+      200,
     );
   };
 
@@ -123,11 +123,7 @@ function ViewModal({ row, columns, onClose, exiting }) {
             </div>
             <span className="dt-modal__title">Row Details</span>
           </div>
-          <button
-            className="dt-modal__close"
-            onClick={onClose}
-            aria-label="Close"
-          >
+          <button className="dt-modal__close" onClick={onClose} aria-label="Close">
             <X size={15} />
           </button>
         </div>
@@ -135,12 +131,7 @@ function ViewModal({ row, columns, onClose, exiting }) {
         <div className="dt-modal__body">
           <div className="dt-view-grid">
             {fields.map((col) => (
-              <div
-                className={`dt-view-field${
-                  col.fullWidth ? " dt-view-field--full" : ""
-                }`}
-                key={col.key}
-              >
+              <div className={`dt-view-field${col.fullWidth ? " dt-view-field--full" : ""}`} key={col.key}>
                 <span className="dt-view-field__label">{col.header}</span>
                 <span className="dt-view-field__value">
                   {col.render
@@ -170,7 +161,7 @@ function ViewModal({ row, columns, onClose, exiting }) {
 function EditModal({ row, columns, onClose, onSave, exiting }) {
   const editableCols = columns.filter((c) => c.key !== "__actions");
   const [form, setForm] = useState(() =>
-    Object.fromEntries(editableCols.map((c) => [c.key, row[c.key] ?? ""]))
+    Object.fromEntries(editableCols.map((c) => [c.key, row[c.key] ?? ""])),
   );
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -185,11 +176,7 @@ function EditModal({ row, columns, onClose, onSave, exiting }) {
             </div>
             <span className="dt-modal__title">Edit Row</span>
           </div>
-          <button
-            className="dt-modal__close"
-            onClick={onClose}
-            aria-label="Close"
-          >
+          <button className="dt-modal__close" onClick={onClose} aria-label="Close">
             <X size={15} />
           </button>
         </div>
@@ -214,10 +201,7 @@ function EditModal({ row, columns, onClose, onSave, exiting }) {
           <button className="dt-btn dt-btn--ghost" onClick={onClose}>
             Cancel
           </button>
-          <button
-            className="dt-btn dt-btn--primary"
-            onClick={() => onSave(form)}
-          >
+          <button className="dt-btn dt-btn--primary" onClick={() => onSave(form)}>
             <Save size={14} />
             Save Changes
           </button>
@@ -241,11 +225,7 @@ function DeleteModal({ row, labelKey, onClose, onConfirm, exiting }) {
             </div>
             <span className="dt-modal__title">Confirm Delete</span>
           </div>
-          <button
-            className="dt-modal__close"
-            onClick={onClose}
-            aria-label="Close"
-          >
+          <button className="dt-modal__close" onClick={onClose} aria-label="Close">
             <X size={15} />
           </button>
         </div>
@@ -311,9 +291,15 @@ const DataTable = ({
   rowActions = ["view", "edit", "delete"],
   // Key whose value appears in the delete confirm chip
   rowLabelKey,
+  // Server-side search — when true, search input calls onSearch(query) instead of filtering locally
+  serverSearch = false,
+  searchValue,      // controlled value for search input when serverSearch is true
+  onSearch,         // callback(query) fired on search input change
 }) => {
   const [data, setData] = useState(initialData);
-  const [search, setSearch] = useState("");
+  const [localSearch, setLocalSearch] = useState("");
+  // When serverSearch is on, use the controlled value from parent (synced with URL)
+  const search = serverSearch ? (searchValue ?? "") : localSearch;
   const [sortKey, setSortKey] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
   const [clientPage, setClientPage] = useState(1);
@@ -338,8 +324,8 @@ const DataTable = ({
       (searchKeys.length ? searchKeys : columns.map((c) => c.key)).some((k) =>
         String(row[k] ?? "")
           .toLowerCase()
-          .includes(q)
-      )
+          .includes(q),
+      ),
     );
   }, [data, search, searchKeys, columns]);
 
@@ -350,7 +336,7 @@ const DataTable = ({
       const cmp = String(a[sortKey] ?? "").localeCompare(
         String(b[sortKey] ?? ""),
         undefined,
-        { numeric: true }
+        { numeric: true },
       );
       return sortDir === "asc" ? cmp : -cmp;
     });
@@ -360,10 +346,7 @@ const DataTable = ({
   const isServer = serverPagination;
   const activePage = isServer
     ? serverPage
-    : Math.min(
-        clientPage,
-        Math.max(1, Math.ceil(sorted.length / CLIENT_PAGE_SIZE))
-      );
+    : Math.min(clientPage, Math.max(1, Math.ceil(sorted.length / CLIENT_PAGE_SIZE)));
   const totalPages = isServer
     ? lastPage
     : Math.max(1, Math.ceil(sorted.length / CLIENT_PAGE_SIZE));
@@ -371,9 +354,9 @@ const DataTable = ({
     ? sorted
     : sorted.slice(
         (activePage - 1) * CLIENT_PAGE_SIZE,
-        activePage * CLIENT_PAGE_SIZE
+        activePage * CLIENT_PAGE_SIZE,
       );
-  const displayTotal = isServer ? total ?? data.length : sorted.length;
+  const displayTotal = isServer ? (total ?? data.length) : sorted.length;
   const pageSize = isServer ? perPage : CLIENT_PAGE_SIZE;
   const fromRow = (activePage - 1) * pageSize + 1;
   const toRow = Math.min(activePage * pageSize, displayTotal);
@@ -386,16 +369,18 @@ const DataTable = ({
 
   const handleSort = (key) => {
     if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    else {
-      setSortKey(key);
-      setSortDir("asc");
-    }
+    else { setSortKey(key); setSortDir("asc"); }
     if (!isServer) setClientPage(1);
   };
 
   const handleSearch = (e) => {
-    setSearch(e.target.value);
-    if (!isServer) setClientPage(1);
+    const q = e.target.value;
+    if (serverSearch) {
+      onSearch?.(q);
+    } else {
+      setLocalSearch(q);
+      if (!isServer) setClientPage(1);
+    }
   };
 
   // ── Page number list with ellipsis ───────────────────────────────────────
@@ -408,21 +393,15 @@ const DataTable = ({
     }, []);
 
   // ── Modal handlers ───────────────────────────────────────────────────────
-  const handleView = (row) => {
-    onView?.(row);
-    modal.open("view", row);
-  };
-  const handleEdit = (row) => {
-    onEdit?.(row);
-    modal.open("edit", row);
-  };
+  const handleView = (row) => { onView?.(row); modal.open("view", row); };
+  const handleEdit = (row) => { onEdit?.(row); modal.open("edit", row); };
   const handleDelete = (row) => modal.open("delete", row);
 
   const handleSaveEdit = (formData) => {
     setData((prev) =>
       prev.map((r) =>
-        r[rowKey] === modal.data[rowKey] ? { ...r, ...formData } : r
-      )
+        r[rowKey] === modal.data[rowKey] ? { ...r, ...formData } : r,
+      ),
     );
     onEdit?.(formData);
     modal.close();
@@ -528,9 +507,9 @@ const DataTable = ({
                     {tableColumns.map((col) => (
                       <th
                         key={col.key}
-                        className={`dt-th${
-                          col.key !== "__actions" ? " dt-th--sortable" : ""
-                        }${sortKey === col.key ? " dt-th--sorted" : ""}`}
+                        className={`dt-th${col.key !== "__actions" ? " dt-th--sortable" : ""}${
+                          sortKey === col.key ? " dt-th--sorted" : ""
+                        }`}
                         style={{
                           width: col.width,
                           textAlign: col.align ?? "left",
@@ -571,7 +550,7 @@ const DataTable = ({
                         >
                           {col.render
                             ? col.render(row[col.key], row)
-                            : row[col.key] ?? "—"}
+                            : (row[col.key] ?? "—")}
                         </td>
                       ))}
                     </tr>
@@ -596,9 +575,7 @@ const DataTable = ({
                   </button>
                   {pageNumbers.map((p, i) =>
                     p === "…" ? (
-                      <span key={`e${i}`} className="dt-page-ellipsis">
-                        …
-                      </span>
+                      <span key={`e${i}`} className="dt-page-ellipsis">…</span>
                     ) : (
                       <button
                         key={p}
@@ -609,7 +586,7 @@ const DataTable = ({
                       >
                         {p}
                       </button>
-                    )
+                    ),
                   )}
                   <button
                     className="dt-page-btn"

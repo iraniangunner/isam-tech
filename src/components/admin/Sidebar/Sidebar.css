@@ -16,7 +16,7 @@
   --sb-badge-bg: #f59e0b;
 }
 
-/* ── Shell — NO overflow:hidden so popover can escape ──────────────────────── */
+/* ── Shell ──────────────────────────────────────────────────────────────────── */
 .sidebar {
   width: var(--sidebar-width-collapsed);
   background: var(--sb-bg);
@@ -26,13 +26,14 @@
   inset: 0 auto 0 0;
   z-index: 200;
   border-right: 1px solid var(--sb-border);
-  transition: width var(--sidebar-transition);
+  transition: width var(--sidebar-transition),
+    transform var(--sidebar-transition);
 }
 .sidebar--open {
   width: var(--sidebar-width-open);
 }
 
-/* ── Header — overflow:hidden only here to clip brand text ─────────────────── */
+/* ── Header ─────────────────────────────────────────────────────────────────── */
 .sidebar__header {
   height: var(--sidebar-header-h);
   display: flex;
@@ -101,7 +102,7 @@
   padding: 0;
 }
 
-/* ── Nav — overflow:hidden on x to clip labels ─────────────────────────────── */
+/* ── Nav ────────────────────────────────────────────────────────────────────── */
 .sidebar__nav {
   flex: 1;
   padding: 12px 8px;
@@ -144,6 +145,7 @@
 .sidebar__nav-item--active .sidebar__nav-icon {
   color: var(--sb-accent);
 }
+
 .sidebar__nav-icon {
   font-size: 16px;
   flex-shrink: 0;
@@ -164,7 +166,7 @@
   flex-shrink: 0;
 }
 
-/* ── Footer ────────────────────────────────────────────────────────────────── */
+/* ── Footer ─────────────────────────────────────────────────────────────────── */
 .sidebar__footer {
   padding: 12px 8px;
   border-top: 1px solid var(--sb-border);
@@ -175,7 +177,6 @@
   flex-shrink: 0;
 }
 
-/* ── User chip (open: static display, not a button) ─────────────────────────── */
 .sidebar__user-chip {
   display: flex;
   align-items: center;
@@ -183,8 +184,6 @@
   padding: 8px;
   border-radius: 8px;
 }
-
-/* Collapsed variant — it's a button */
 .sidebar__user-chip--btn {
   border: 1px solid transparent;
   background: transparent;
@@ -233,7 +232,6 @@
   color: var(--sb-text);
 }
 
-/* ── Sign out button (open sidebar) ─────────────────────────────────────────── */
 .sidebar__logout-btn {
   width: 100%;
   padding: 8px;
@@ -255,7 +253,7 @@
   border-color: #dc2626;
 }
 
-/* ── Popover (collapsed sidebar only, flies right) ───────────────────────────── */
+/* ── Popover (collapsed sidebar only) ───────────────────────────────────────── */
 .sidebar__menu {
   position: absolute;
   bottom: 0;
@@ -269,7 +267,6 @@
   z-index: 9999;
   animation: menu-pop-right 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 @keyframes menu-pop-right {
   from {
     opacity: 0;
@@ -280,7 +277,6 @@
     transform: translateX(0);
   }
 }
-
 .sidebar__menu-header {
   display: flex;
   align-items: center;
@@ -309,12 +305,10 @@
   color: var(--sb-text);
   margin-top: 1px;
 }
-
 .sidebar__menu-divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.06);
 }
-
 .sidebar__menu-item {
   display: flex;
   align-items: center;
@@ -341,4 +335,25 @@
 }
 .sidebar__menu-item-icon {
   font-size: 15px;
+}
+
+/* ── MOBILE ─────────────────────────────────────────────────────────────────── */
+/* On mobile the sidebar is hidden off-screen by default.
+   It slides in only when .sidebar--open is applied.                            */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%); /* hidden off-screen */
+    width: var(
+      --sidebar-width-open
+    ) !important; /* always full width when it slides in */
+  }
+
+  .sidebar--open {
+    transform: translateX(0); /* slide in */
+  }
+
+  /* collapsed class on mobile = also hidden */
+  .sidebar--collapsed {
+    transform: translateX(-100%);
+  }
 }

@@ -1,12 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
-import {
-  Mail,
-  User,
-  BarChart2,
-  Settings,
-} from "lucide-react";
+import { Mail, User, BarChart2, Settings, Menu } from "lucide-react";
 import Sidebar from "../../../components/admin/Sidebar/Sidebar";
 import "./Dashboard.css";
 
@@ -18,31 +13,49 @@ const NAV_ITEMS = [
   { id: "settings",   icon: <Settings size={16} />,  label: "Settings",  path: "/admin/settings"  },
 ];
 
+const MOBILE_BP = 768;
+
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Highlight the correct nav item based on current URL
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth > MOBILE_BP);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= MOBILE_BP);
+
+  useEffect(() => {
+    const handler = () => {
+      const mobile = window.innerWidth <= MOBILE_BP;
+      setIsMobile(mobile);
+      setSidebarOpen(!mobile);
+    };
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+
   const activeNav =
-    NAV_ITEMS.find((item) => location.pathname.startsWith(item.path))?.id ??
-    "messages";
+    NAV_ITEMS.find((item) => location.pathname.startsWith(item.path))?.id ?? "dashboard";
 
-  const handleLogout = async () => {
-    await logout();
-    navigate("/login");
+  const handleLogout = async () => { await logout(); navigate("/login"); };
+
+  const handleNavChange = (id) => {
+    const item = NAV_ITEMS.find((n) => n.id === id);
+    if (item) navigate(item.path);
+    if (isMobile) setSidebarOpen(false);
   };
 
   return (
     <div className={`admin-shell ${sidebarOpen ? "admin-shell--open" : ""}`}>
+
+      {/* Mobile backdrop */}
+      {isMobile && sidebarOpen && (
+        <div className="admin-shell__backdrop" onClick={() => setSidebarOpen(false)} />
+      )}
+
       <Sidebar
         navItems={NAV_ITEMS}
         activeId={activeNav}
-        onNavChange={(id) => {
-          const item = NAV_ITEMS.find((n) => n.id === id);
-          if (item) navigate(item.path);
-        }}
+        onNavChange={handleNavChange}
         brand={{ name: "AdminKit", mark: "A" }}
         user={{ name: user?.name, role: "Administrator" }}
         onLogout={handleLogout}
@@ -51,7 +64,20 @@ const Dashboard = () => {
       />
 
       <div className="main-area">
-        {/* Each child route (Messages, Analytics, etc.) renders here */}
+        {/* Mobile topbar with hamburger — only visible on mobile */}
+        {isMobile && (
+          <div className="mobile-topbar">
+            <button
+              className="mobile-topbar__hamburger"
+              onClick={() => setSidebarOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu size={20} />
+            </button>
+            <span className="mobile-topbar__title">AdminKit</span>
+          </div>
+        )}
+
         <Outlet />
       </div>
     </div>
