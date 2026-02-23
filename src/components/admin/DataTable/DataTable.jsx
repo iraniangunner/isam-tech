@@ -68,7 +68,7 @@ function useModal() {
     setState((s) => ({ ...s, exiting: true }));
     setTimeout(
       () => setState({ open: false, exiting: false, data: null, type: null }),
-      200,
+      200
     );
   };
 
@@ -135,10 +135,19 @@ function ViewModal({ row, columns, onClose, exiting }) {
         <div className="dt-modal__body">
           <div className="dt-view-grid">
             {fields.map((col) => (
-              <div className="dt-view-field" key={col.key}>
+              <div
+                className={`dt-view-field${
+                  col.fullWidth ? " dt-view-field--full" : ""
+                }`}
+                key={col.key}
+              >
                 <span className="dt-view-field__label">{col.header}</span>
                 <span className="dt-view-field__value">
-                  {row[col.key] != null ? String(row[col.key]) : "—"}
+                  {col.render
+                    ? col.render(row[col.key], row)
+                    : row[col.key] != null
+                    ? String(row[col.key])
+                    : "—"}
                 </span>
               </div>
             ))}
@@ -161,7 +170,7 @@ function ViewModal({ row, columns, onClose, exiting }) {
 function EditModal({ row, columns, onClose, onSave, exiting }) {
   const editableCols = columns.filter((c) => c.key !== "__actions");
   const [form, setForm] = useState(() =>
-    Object.fromEntries(editableCols.map((c) => [c.key, row[c.key] ?? ""])),
+    Object.fromEntries(editableCols.map((c) => [c.key, row[c.key] ?? ""]))
   );
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -329,8 +338,8 @@ const DataTable = ({
       (searchKeys.length ? searchKeys : columns.map((c) => c.key)).some((k) =>
         String(row[k] ?? "")
           .toLowerCase()
-          .includes(q),
-      ),
+          .includes(q)
+      )
     );
   }, [data, search, searchKeys, columns]);
 
@@ -341,7 +350,7 @@ const DataTable = ({
       const cmp = String(a[sortKey] ?? "").localeCompare(
         String(b[sortKey] ?? ""),
         undefined,
-        { numeric: true },
+        { numeric: true }
       );
       return sortDir === "asc" ? cmp : -cmp;
     });
@@ -353,7 +362,7 @@ const DataTable = ({
     ? serverPage
     : Math.min(
         clientPage,
-        Math.max(1, Math.ceil(sorted.length / CLIENT_PAGE_SIZE)),
+        Math.max(1, Math.ceil(sorted.length / CLIENT_PAGE_SIZE))
       );
   const totalPages = isServer
     ? lastPage
@@ -362,9 +371,9 @@ const DataTable = ({
     ? sorted
     : sorted.slice(
         (activePage - 1) * CLIENT_PAGE_SIZE,
-        activePage * CLIENT_PAGE_SIZE,
+        activePage * CLIENT_PAGE_SIZE
       );
-  const displayTotal = isServer ? (total ?? data.length) : sorted.length;
+  const displayTotal = isServer ? total ?? data.length : sorted.length;
   const pageSize = isServer ? perPage : CLIENT_PAGE_SIZE;
   const fromRow = (activePage - 1) * pageSize + 1;
   const toRow = Math.min(activePage * pageSize, displayTotal);
@@ -412,8 +421,8 @@ const DataTable = ({
   const handleSaveEdit = (formData) => {
     setData((prev) =>
       prev.map((r) =>
-        r[rowKey] === modal.data[rowKey] ? { ...r, ...formData } : r,
-      ),
+        r[rowKey] === modal.data[rowKey] ? { ...r, ...formData } : r
+      )
     );
     onEdit?.(formData);
     modal.close();
@@ -428,7 +437,8 @@ const DataTable = ({
     showToast(`"${label}" deleted`, "danger");
   };
 
-  // Append built-in actions column
+  // allColumns = everything including hideInTable cols (used by modals)
+  // tableColumns = only what renders in the actual table
   const allColumns = [
     ...columns,
     {
@@ -468,6 +478,7 @@ const DataTable = ({
       ),
     },
   ];
+  const tableColumns = allColumns.filter((c) => !c.hideInTable);
 
   return (
     <>
@@ -514,12 +525,12 @@ const DataTable = ({
                 <thead>
                   <tr>
                     <th className="dt-th dt-th--num">#</th>
-                    {allColumns.map((col) => (
+                    {tableColumns.map((col) => (
                       <th
                         key={col.key}
-                        className={`dt-th${col.key !== "__actions" ? " dt-th--sortable" : ""}${
-                          sortKey === col.key ? " dt-th--sorted" : ""
-                        }`}
+                        className={`dt-th${
+                          col.key !== "__actions" ? " dt-th--sortable" : ""
+                        }${sortKey === col.key ? " dt-th--sorted" : ""}`}
                         style={{
                           width: col.width,
                           textAlign: col.align ?? "left",
@@ -552,7 +563,7 @@ const DataTable = ({
                   {displayRows.map((row, i) => (
                     <tr key={row[rowKey] ?? i} className="dt-row">
                       <td className="dt-td dt-td--num">{fromRow + i}</td>
-                      {allColumns.map((col) => (
+                      {tableColumns.map((col) => (
                         <td
                           key={col.key}
                           className="dt-td"
@@ -560,7 +571,7 @@ const DataTable = ({
                         >
                           {col.render
                             ? col.render(row[col.key], row)
-                            : (row[col.key] ?? "—")}
+                            : row[col.key] ?? "—"}
                         </td>
                       ))}
                     </tr>
@@ -598,7 +609,7 @@ const DataTable = ({
                       >
                         {p}
                       </button>
-                    ),
+                    )
                   )}
                   <button
                     className="dt-page-btn"

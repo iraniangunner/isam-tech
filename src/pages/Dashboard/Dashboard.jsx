@@ -19,9 +19,9 @@ import DataTable from "../../components/admin/DataTable/DataTable";
 import "./Dashboard.css";
 
 const NAV_ITEMS = [
-  { id: "messages", icon: <Mail size={16} />, label: "Messages" },
-  { id: "users", icon: <User size={16} />, label: "Users" },
-  { id: "analytics", icon: <BarChart2 size={16} />, label: "Analytics" },
+  { id: "messages", icon: <Mail size={16} />,     label: "Messages" },
+  { id: "users",    icon: <User size={16} />,     label: "Users" },
+  { id: "analytics",icon: <BarChart2 size={16} />,label: "Analytics" },
   { id: "settings", icon: <Settings size={16} />, label: "Settings" },
 ];
 
@@ -47,11 +47,16 @@ const SenderCell = ({ name, email }) => (
     <div className="sender-cell__avatar">{name?.[0]?.toUpperCase()}</div>
     <div>
       <div className="sender-cell__name">{name}</div>
-      <div className="sender-cell__email">{email}</div>
+      <a
+        className="sender-cell__email sender-cell__email--link"
+        href={`mailto:${email}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {email}
+      </a>
     </div>
   </div>
 );
-
 const MESSAGE_COLUMNS = [
   {
     key: "name",
@@ -67,7 +72,7 @@ const MESSAGE_COLUMNS = [
     key: "status",
     header: "Status",
     width: "120px",
-    hideInView: true, // ← hidden from view modal
+    hideInView: true,                              // ← hidden from view modal
     render: (v) => <StatusBadge status={v} />,
   },
   {
@@ -80,6 +85,12 @@ const MESSAGE_COLUMNS = [
         month: "short",
         day: "numeric",
       }),
+  },
+  {
+    key: "message",
+    header: "Message",
+    hideInTable: true,  // not a table column — only shows in the view modal
+    fullWidth: true,    // spans full width in the modal
   },
 ];
 
@@ -109,8 +120,8 @@ const Dashboard = () => {
       const rows = Array.isArray(payload?.data)
         ? payload.data
         : Array.isArray(payload)
-          ? payload
-          : [];
+        ? payload
+        : [];
 
       setMessages(rows);
       setCurrentPage(payload?.current_page ?? 1);
@@ -128,22 +139,33 @@ const Dashboard = () => {
     fetchMessages(1);
   }, [fetchMessages]);
 
+  // Called when the Eye button is clicked — GET /admin/contact/:id
+  // The backend show() method automatically marks status as "read" if it was "new"
+  const handleViewMessage = useCallback(async (row) => {
+    if (row.status === "read") return;
+    try {
+      await api.get(`/admin/contact/${row.id}`);
+      setMessages((prev) =>
+        prev.map((m) => (m.id === row.id ? { ...m, status: "read" } : m))
+      );
+    } catch (err) {
+      console.error("Failed to fetch message:", err);
+    }
+  }, []);
+
   // Called after DataTable confirms deletion — sync with the server
-  const handleDeleteMessage = useCallback(
-    async (row) => {
-      try {
-        await api.delete(`/admin/contact/${row.id}`);
-        const pageToLoad =
-          messages.length === 1 && currentPage > 1
-            ? currentPage - 1
-            : currentPage;
-        fetchMessages(pageToLoad);
-      } catch (err) {
-        console.error("Failed to delete message:", err);
-      }
-    },
-    [messages.length, currentPage, fetchMessages],
-  );
+  const handleDeleteMessage = useCallback(async (row) => {
+    try {
+      await api.delete(`/admin/contact/${row.id}`);
+      const pageToLoad =
+        messages.length === 1 && currentPage > 1
+          ? currentPage - 1
+          : currentPage;
+      fetchMessages(pageToLoad);
+    } catch (err) {
+      console.error("Failed to delete message:", err);
+    }
+  }, [messages.length, currentPage, fetchMessages]);
 
   const handleLogout = async () => {
     await logout();
@@ -151,10 +173,10 @@ const Dashboard = () => {
   };
 
   const newMsgs = messages.filter((m) => m.status === "new").length;
-  const read = messages.filter((m) => m.status === "read").length;
+  const read    = messages.filter((m) => m.status === "read").length;
 
   const navItemsWithBadges = NAV_ITEMS.map((item) =>
-    item.id === "messages" ? { ...item, badge: newMsgs } : item,
+    item.id === "messages" ? { ...item, badge: newMsgs } : item
   );
 
   return (
@@ -189,24 +211,9 @@ const Dashboard = () => {
 
         <main className="content">
           <div className="stats-grid">
-            <StatCard
-              label="Total"
-              value={total}
-              icon={<Mail size={20} />}
-              accent="blue"
-            />
-            <StatCard
-              label="New"
-              value={newMsgs}
-              icon={<MessagesSquare size={20} />}
-              accent="amber"
-            />
-            <StatCard
-              label="Read"
-              value={read}
-              icon={<MailOpen size={20} />}
-              accent="green"
-            />
+            <StatCard label="Total"         value={total}   icon={<Mail size={20} />}           accent="blue"   />
+            <StatCard label="New"           value={newMsgs} icon={<MessagesSquare size={20} />} accent="amber"  />
+            <StatCard label="Read"          value={read}    icon={<MailOpen size={20} />}        accent="green"  />
             <StatCard
               label="Response Rate"
               value={total ? `${Math.round((read / total) * 100)}%` : "—"}
@@ -227,6 +234,7 @@ const Dashboard = () => {
             rowKey="id"
             rowLabelKey="name"
             rowActions={["view", "delete"]}
+            onView={handleViewMessage}
             onDelete={handleDeleteMessage}
             serverPagination
             currentPage={currentPage}

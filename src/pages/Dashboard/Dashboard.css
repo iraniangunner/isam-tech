@@ -300,6 +300,11 @@
   background: #22c55e;
 }
 
+.sender-cell__email--link:hover {
+  color: var(--blue, #3b82f6);
+  text-decoration: underline;
+}
+
 /* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .stats-grid {
