@@ -9,14 +9,16 @@ import { useLanguage } from "./hooks/useTranslation";
 import { LEGACY_REDIRECTS, ROUTES, getPath } from "./utils/routes";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-const About = lazy(() => import("./pages/About"));
-const Services = lazy(() => import("./pages/Services"));
-const Contact = lazy(() => import("./pages/Contact"));
-const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
-const DataPrivacy = lazy(() => import("./pages/DataPrivacy"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const Login = lazy(() => import("./pages/Login/Login"));
-const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
+const About        = lazy(() => import("./pages/About"));
+const Services     = lazy(() => import("./pages/Services"));
+const Contact      = lazy(() => import("./pages/Contact"));
+const PrivacyPolicy= lazy(() => import("./pages/PrivacyPolicy"));
+const DataPrivacy  = lazy(() => import("./pages/DataPrivacy"));
+const NotFound     = lazy(() => import("./pages/NotFound"));
+const Login        = lazy(() => import("./pages/Login/Login"));
+const Dashboard    = lazy(() => import("./pages/admin/Dashboard/Dashboard"));
+const Messages      = lazy(() => import("./pages/admin/Messages/Messages"));
+const DashboardHome = lazy(() => import("./pages/admin/Dashboard/DashboardHome"));
 
 function App() {
   const { language } = useLanguage();
@@ -29,18 +31,51 @@ function App() {
       </a>
 
       <Routes>
-        {/* Auth routes — no Navbar/Footer */}
+        {/* ── Auth — no Navbar/Footer ──────────────────────────────────── */}
         <Route path="/login" element={<Login />} />
+
+        {/* ── Admin — Dashboard is the sidebar shell, all pages nest inside ── */}
         <Route
-          path="/admin/dashboard"
+          path="/admin"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <Suspense fallback={null}>
+                <Dashboard />
+              </Suspense>
             </ProtectedRoute>
           }
-        />
+        >
+          {/* /admin → redirect to /admin/dashboard */}
+          <Route index element={<Navigate to="dashboard" replace />} />
 
-        {/* Public routes — with Navbar/Footer */}
+          {/* /admin/dashboard — home/overview page */}
+          <Route
+            path="dashboard"
+            element={
+              <Suspense fallback={null}>
+                <DashboardHome />
+              </Suspense>
+            }
+          />
+
+          {/* /admin/messages */}
+          <Route
+            path="messages"
+            element={
+              <Suspense fallback={null}>
+                <Messages />
+              </Suspense>
+            }
+          />
+
+          {/* Uncomment as you build each page:
+          <Route path="analytics" element={<Suspense fallback={null}><Analytics /></Suspense>} />
+          <Route path="users"     element={<Suspense fallback={null}><Users /></Suspense>}     />
+          <Route path="settings"  element={<Suspense fallback={null}><Settings /></Suspense>}  />
+          */}
+        </Route>
+
+        {/* ── Public routes — with Navbar/Footer ──────────────────────── */}
         <Route
           path="*"
           element={
@@ -51,40 +86,26 @@ function App() {
                   <Routes>
                     <Route
                       path="/"
-                      element={
-                        <Navigate to={getPath(language, "home")} replace />
-                      }
+                      element={<Navigate to={getPath(language, "home")} replace />}
                     />
 
-                    <Route path={ROUTES.fa.home} element={<Home />} />
-                    <Route path={ROUTES.en.home} element={<Home />} />
+                    <Route path={ROUTES.fa.home}    element={<Home />} />
+                    <Route path={ROUTES.en.home}    element={<Home />} />
 
-                    <Route path={ROUTES.fa.about} element={<About />} />
-                    <Route path={ROUTES.en.about} element={<About />} />
+                    <Route path={ROUTES.fa.about}   element={<About />} />
+                    <Route path={ROUTES.en.about}   element={<About />} />
 
                     <Route path={ROUTES.fa.services} element={<Services />} />
                     <Route path={ROUTES.en.services} element={<Services />} />
 
-                    <Route path={ROUTES.fa.contact} element={<Contact />} />
-                    <Route path={ROUTES.en.contact} element={<Contact />} />
+                    <Route path={ROUTES.fa.contact}  element={<Contact />} />
+                    <Route path={ROUTES.en.contact}  element={<Contact />} />
 
-                    <Route
-                      path={ROUTES.fa.privacyPolicy}
-                      element={<PrivacyPolicy />}
-                    />
-                    <Route
-                      path={ROUTES.en.privacyPolicy}
-                      element={<PrivacyPolicy />}
-                    />
+                    <Route path={ROUTES.fa.privacyPolicy} element={<PrivacyPolicy />} />
+                    <Route path={ROUTES.en.privacyPolicy} element={<PrivacyPolicy />} />
 
-                    <Route
-                      path={ROUTES.fa.dataPrivacy}
-                      element={<DataPrivacy />}
-                    />
-                    <Route
-                      path={ROUTES.en.dataPrivacy}
-                      element={<DataPrivacy />}
-                    />
+                    <Route path={ROUTES.fa.dataPrivacy} element={<DataPrivacy />} />
+                    <Route path={ROUTES.en.dataPrivacy} element={<DataPrivacy />} />
 
                     {LEGACY_REDIRECTS.map((redirect) => (
                       <Route

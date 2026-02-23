@@ -1,0 +1,121 @@
+/* Depends on tokens from Dashboard.css */
+
+.dh-hero {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e8eaed);
+  border-radius: 16px;
+  padding: 36px 40px;
+  box-shadow: var(--shadow-sm);
+}
+
+.dh-hero__greeting {
+  font-size: 14px;
+  color: var(--text-muted, #9ca3af);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.dh-hero__name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
+  line-height: 1.15;
+}
+
+.dh-hero__sub {
+  font-size: 14px;
+  color: var(--text-secondary, #6b7280);
+  margin-top: 8px;
+}
+
+/* ── Quick links ────────────────────────────────────────────────────────────── */
+.dh-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.dh-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e8eaed);
+  border-radius: 14px;
+  padding: 20px 22px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  box-shadow: var(--shadow-sm);
+  transition: transform 200ms ease, box-shadow 200ms ease,
+    border-color 200ms ease;
+  position: relative;
+  overflow: hidden;
+}
+.dh-link::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: 2px 0 0 2px;
+}
+.dh-link:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.dh-link__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+/* Accent variants */
+.dh-link.accent-blue::before {
+  background: var(--blue, #3b82f6);
+}
+.dh-link.accent-blue .dh-link__icon {
+  background: var(--blue-bg, #eff6ff);
+  color: var(--blue, #3b82f6);
+}
+.dh-link.accent-blue:hover {
+  border-color: var(--blue, #3b82f6);
+}
+
+.dh-link.accent-purple::before {
+  background: var(--purple, #8b5cf6);
+}
+.dh-link.accent-purple .dh-link__icon {
+  background: var(--purple-bg, #f5f3ff);
+  color: var(--purple, #8b5cf6);
+}
+.dh-link.accent-purple:hover {
+  border-color: var(--purple, #8b5cf6);
+}
+
+.dh-link.accent-amber::before {
+  background: var(--amber, #f59e0b);
+}
+.dh-link.accent-amber .dh-link__icon {
+  background: var(--amber-bg, #fffbeb);
+  color: var(--amber, #f59e0b);
+}
+.dh-link.accent-amber:hover {
+  border-color: var(--amber, #f59e0b);
+}
+
+.dh-link__label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  line-height: 1.2;
+}
+
+.dh-link__sub {
+  font-size: 12.5px;
+  color: var(--text-muted, #9ca3af);
+  margin-top: 3px;
+}
