@@ -58,6 +58,7 @@ const MESSAGE_COLUMNS = [
     header: "Subject",
     render: (v) => <span className="msg-preview">{v ?? "—"}</span>,
   },
+
   {
     key: "status",
     header: "Status",

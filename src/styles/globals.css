@@ -386,3 +386,65 @@ p {
 .delay-300 { animation-delay: 300ms; }
 .delay-400 { animation-delay: 400ms; }
 .delay-500 { animation-delay: 500ms; }
+
+/* ── Topbar ─────────────────────────────────────────────────────────────────── */
+.topbar {
+  height: var(--topbar-h, 60px);
+  background: var(--surface, #fff);
+  border-bottom: 1px solid var(--border, #e8eaed);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.topbar__left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.topbar__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
+  line-height: 1.2;
+}
+
+.topbar__subtitle {
+  font-size: 12px;
+  color: var(--text-muted, #9ca3af);
+  margin-top: 1px;
+}
+
+.topbar__refresh {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #e8eaed);
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-secondary, #6b7280);
+  display: grid;
+  place-items: center;
+  transition: background var(--transition), color var(--transition),
+    transform 0.3s ease;
+}
+.topbar__refresh:hover {
+  background: var(--bg, #f5f6fa);
+  color: var(--text-primary, #111827);
+  transform: rotate(90deg);
+}
+
+/* ── Page content ───────────────────────────────────────────────────────────── */
+.content {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+}

@@ -1,0 +1,173 @@
+/* ── Admin shared layout ─────────────────────────────── */
+/* ── Controls ────────────────────────────────────────────────────────────────  */
+.an-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.an-range-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #e8eaed);
+  background: var(--surface, #fff);
+  color: var(--text-secondary, #6b7280);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+.an-range-btn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+}
+.an-range-btn--active {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+.an-refresh-btn {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid var(--border, #e8eaed);
+  background: var(--surface, #fff);
+  color: var(--text-secondary, #6b7280);
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+.an-refresh-btn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+}
+.an-spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Stat cards ──────────────────────────────────────────────────────────────  */
+.an-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .an-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 500px) {
+  .an-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.an-stat {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e8eaed);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.an-stat__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.an-stat.accent-blue .an-stat__icon {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
+.an-stat.accent-purple .an-stat__icon {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+.an-stat.accent-green .an-stat__icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+.an-stat.accent-amber .an-stat__icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+.an-stat__value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
+  line-height: 1;
+}
+.an-stat__label {
+  font-size: 12.5px;
+  color: var(--text-muted, #9ca3af);
+  margin-top: 4px;
+}
+
+/* ── Chart card ──────────────────────────────────────────────────────────────  */
+.an-card {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e8eaed);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.an-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border, #e8eaed);
+}
+.an-card__header h2 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  margin: 0;
+}
+.an-card__sub {
+  font-size: 12px;
+  color: var(--text-muted, #9ca3af);
+}
+.an-card__body {
+  padding: 24px 16px 16px;
+}
+
+/* ── Tooltip ──────────────────────────────────────────────────────────────────  */
+.an-tooltip {
+  background: var(--text-primary, #111827);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.an-tooltip__label {
+  font-size: 11px;
+  color: #9ca3af;
+  margin: 0 0 2px;
+}
+.an-tooltip__value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+/* ── Loading state ────────────────────────────────────────────────────────────  */
+.an-loading {
+  height: 280px;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted, #9ca3af);
+  font-size: 13px;
+}

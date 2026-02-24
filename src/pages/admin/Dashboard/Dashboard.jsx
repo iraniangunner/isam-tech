@@ -7,6 +7,16 @@ import "./Dashboard.css";
 
 const NAV_ITEMS = [
   { id: "dashboard",  icon: <BarChart2 size={16} />, label: "Dashboard", path: "/admin/dashboard" },
+  // {
+  //   id: "content",
+  //   icon: <Mail size={16} />,
+  //   label: "Content",
+  //   path: "/admin/content",
+  //   children: [                                           // ← dropdown
+  //     { id: "messages", label: "Messages", path: "/admin/messages" },
+  //     { id: "comments", label: "Comments", path: "/admin/comments" },
+  //   ],
+  // },
   { id: "messages",   icon: <Mail size={16} />,      label: "Messages",  path: "/admin/messages"  },
   { id: "users",      icon: <User size={16} />,      label: "Users",     path: "/admin/users"     },
   { id: "analytics",  icon: <BarChart2 size={16} />, label: "Analytics", path: "/admin/analytics" },
