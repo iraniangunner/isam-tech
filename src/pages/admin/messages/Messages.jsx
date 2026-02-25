@@ -70,6 +70,7 @@ const MESSAGE_COLUMNS = [
     key: "created_at",
     header: "Date",
     width: "130px",
+    // editType: "date", 
     render: (v) =>
       new Date(v).toLocaleDateString("en-US", {
         year: "numeric",
@@ -82,6 +83,7 @@ const MESSAGE_COLUMNS = [
     header: "Message",
     hideInTable: true,
     fullWidth: true,
+    // editType: "textarea", 
   },
 ];
 
@@ -117,6 +119,18 @@ const Messages = () => {
       }
     },
   });
+
+  // const handleCreate = async (formData, { onSuccess, onError }) => {
+  //   try {
+  //     await api.post("/admin/anything", formData);
+  //     fetch();       // refetch table
+  //     onSuccess();   // close modal + green toast
+  //   } catch (err) {
+  //     if (err.response?.status === 422) {
+  //       onError(err.response.data.errors); // show errors under fields
+  //     }
+  //   }
+  // };
 
   const newMsgs = state.messages.filter((m) => m.status === "new").length;
   const read = state.messages.filter((m) => m.status === "read").length;
@@ -187,6 +201,9 @@ const Messages = () => {
           total={state.total}
           perPage={state.perPage}
           onPageChange={onPageChange}
+          // creatable 
+          // createLabel="New Message" 
+          // onCreateSave={handleCreate}
         />
       </main>
     </>
