@@ -11,16 +11,19 @@ function useTableParams() {
   const sortBy = params.get("sort") ?? "";
   const sortDir = params.get("dir") ?? "desc";
 
-  const set = (updates) =>
-    setParams((prev) => {
-      const next = new URLSearchParams(prev);
-      Object.entries(updates).forEach(([k, v]) => {
-        if (v === "" || v == null) next.delete(k);
-        else next.set(k, String(v));
-      });
-      if ("search" in updates || "sort" in updates) next.set("page", "1");
-      return next;
-    });
+  const set = useCallback(
+    (updates) =>
+      setParams((prev) => {
+        const next = new URLSearchParams(prev);
+        Object.entries(updates).forEach(([k, v]) => {
+          if (v === "" || v == null) next.delete(k);
+          else next.set(k, String(v));
+        });
+        if ("search" in updates || "sort" in updates) next.set("page", "1");
+        return next;
+      }),
+    [setParams],
+  );
 
   return { page, search, sortBy, sortDir, set };
 }
@@ -66,70 +69,74 @@ export function useDataTable({ endpoint, dataKey, onView, onEdit, onDelete }) {
   const [inputValue, setInputValue] = useState(searchParam);
   const debouncedSearch = useDebounce(inputValue, 400);
 
-  // Sync debounced search → URL
+  // Keep a stable ref to `set` so the debounce effect never has a stale closure
+  const setRef = useRef(set);
+  useEffect(() => {
+    setRef.current = set;
+  });
+
+  // Sync debounced search → URL (skip on first render to avoid overwriting URL params on mount)
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
-    set({ search: debouncedSearch });
-  }, [debouncedSearch]); // eslint-disable-line
+    setRef.current({ search: debouncedSearch });
+  }, [debouncedSearch]);
 
   const search = searchParam;
   const [state, dispatch] = useReducer(reducer, makeInitialState(dataKey));
 
-  // Stable fetch via ref — prevents double-fetch on simultaneous param changes
-  const paramsRef = useRef({ page, search, sortBy, sortDir });
+  // fetch receives params directly — no more reliance on a ref that may lag behind
+  const fetch = useCallback(
+    async ({ page, search, sortBy, sortDir } = {}) => {
+      dispatch({ type: "LOADING" });
+      try {
+        const res = await api.get(endpoint, {
+          params: {
+            page,
+            ...(search && { search }),
+            ...(sortBy && { sort_by: sortBy, sort_dir: sortDir }),
+          },
+        });
+        const p = res.data;
+        dispatch({
+          type: "SUCCESS",
+          payload: {
+            [dataKey]: p.data ?? [],
+            currentPage: p.current_page ?? 1,
+            lastPage: p.last_page ?? 1,
+            total: p.total ?? 0,
+            perPage: p.per_page ?? 20,
+          },
+        });
+      } catch (err) {
+        console.error(`[useDataTable] Failed to fetch ${endpoint}:`, err);
+        dispatch({ type: "ERROR" });
+      }
+    },
+    [endpoint, dataKey],
+  );
+
+  // Re-fetch whenever any URL param changes, passing them directly into fetch
   useEffect(() => {
-    paramsRef.current = { page, search, sortBy, sortDir };
-  });
+    fetch({ page, search, sortBy, sortDir });
+  }, [page, search, sortBy, sortDir, fetch]);
 
-  const fetch = useCallback(async () => {
-    const { page, search, sortBy, sortDir } = paramsRef.current;
-    dispatch({ type: "LOADING" });
-    try {
-      const res = await api.get(endpoint, {
-        params: {
-          page,
-          ...(search && { search }),
-          ...(sortBy && { sort_by: sortBy, sort_dir: sortDir }),
-        },
-      });
-      const p = res.data;
-      dispatch({
-        type: "SUCCESS",
-        payload: {
-          [dataKey]: p.data ?? [],
-          currentPage: p.current_page ?? 1,
-          lastPage: p.last_page ?? 1,
-          total: p.total ?? 0,
-          perPage: p.per_page ?? 20,
-        },
-      });
-    } catch (err) {
-      console.error(`[useDataTable] Failed to fetch ${endpoint}:`, err);
-      dispatch({ type: "ERROR" });
-    }
-  }, [endpoint, dataKey]);
-
-  useEffect(() => {
-    fetch();
-  }, [page, search, sortBy, sortDir]); // eslint-disable-line
-
-  // ── Default handlers (can be overridden via options) ──────────────────────
+  // ── Handlers ──────────────────────────────────────────────────────────────
   const handleView = useCallback(
     async (row) => {
       await onView?.(row, { dispatch, state, fetch });
     },
-    [onView, state, fetch]
+    [onView, state, fetch],
   );
 
   const handleEdit = useCallback(
     async (row) => {
       await onEdit?.(row, { dispatch, state, fetch });
     },
-    [onEdit, state, fetch]
+    [onEdit, state, fetch],
   );
 
   const handleDelete = useCallback(
@@ -137,26 +144,36 @@ export function useDataTable({ endpoint, dataKey, onView, onEdit, onDelete }) {
       if (onDelete) {
         await onDelete(row, { dispatch, state, fetch, page, set });
       } else {
-        // Default: DELETE /:id then refetch
         try {
           await api.delete(`${endpoint}/${row.id}`);
           const rows = state[dataKey] ?? [];
           const nextPage = rows.length === 1 && page > 1 ? page - 1 : page;
           set({ page: nextPage });
-          if (nextPage === page) fetch();
+          if (nextPage === page) fetch({ page, search, sortBy, sortDir });
         } catch (err) {
           console.error(`[useDataTable] Failed to delete:`, err);
         }
       }
     },
-    [onDelete, state, page, set, fetch, endpoint, dataKey]
+    [
+      onDelete,
+      state,
+      page,
+      search,
+      sortBy,
+      sortDir,
+      set,
+      fetch,
+      endpoint,
+      dataKey,
+    ],
   );
 
   return {
     state,
     inputValue,
     setInputValue,
-    fetch,
+    fetch: () => fetch({ page, search, sortBy, sortDir }), // public API stays zero-arg
     handleView,
     handleEdit,
     handleDelete,
