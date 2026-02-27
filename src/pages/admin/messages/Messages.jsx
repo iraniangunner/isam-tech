@@ -1,3 +1,4 @@
+import { useState, useEffect, useCallback } from "react";
 import {
   Mail,
   MessagesSquare,
@@ -58,7 +59,6 @@ const MESSAGE_COLUMNS = [
     header: "Subject",
     render: (v) => <span className="msg-preview">{v ?? "—"}</span>,
   },
-
   {
     key: "status",
     header: "Status",
@@ -70,7 +70,6 @@ const MESSAGE_COLUMNS = [
     key: "created_at",
     header: "Date",
     width: "130px",
-    // editType: "date",
     render: (v) =>
       new Date(v).toLocaleDateString("en-US", {
         year: "numeric",
@@ -83,13 +82,29 @@ const MESSAGE_COLUMNS = [
     header: "Message",
     hideInTable: true,
     fullWidth: true,
-    // editType: "textarea",
   },
 ];
 
 // ── Page component ────────────────────────────────────────────────────────────
 
 const Messages = () => {
+  // ── Stats (separate endpoint — always reflects full dataset) ───────────────
+  const [stats, setStats] = useState({ total: 0, new: 0, read: 0 });
+
+  const fetchStats = useCallback(async () => {
+    try {
+      const res = await api.get("/admin/contact/stats");
+      setStats(res.data);
+    } catch (err) {
+      console.error("Failed to fetch stats:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
+
+  // ── Table ──────────────────────────────────────────────────────────────────
   const {
     state,
     inputValue,
@@ -101,6 +116,8 @@ const Messages = () => {
   } = useDataTable({
     endpoint: "/admin/contact",
     dataKey: "messages",
+
+    // Mark message as read when viewed, then refresh stats
     onView: async (row, { dispatch, state }) => {
       if (row.status === "read") return;
       try {
@@ -114,26 +131,29 @@ const Messages = () => {
             ),
           },
         });
+        fetchStats(); // update stat cards after status change
       } catch (err) {
         console.error("Failed to mark as read:", err);
       }
     },
+    onDelete: async (row, { fetch, page, set, state }) => {
+      try {
+        await api.delete(`/admin/contact/${row.id}`);
+        const rows = state.messages ?? [];
+        const nextPage = rows.length === 1 && page > 1 ? page - 1 : page;
+        set({ page: nextPage });
+        if (nextPage === page)
+          fetch({ page, search: "", sortBy: "", sortDir: "desc" });
+        fetchStats(); // ← refresh stat cards
+      } catch (err) {
+        console.error("Failed to delete:", err);
+      }
+    },
   });
 
-  // const handleCreate = async (formData, { onSuccess, onError }) => {
-  //   try {
-  //     await api.post("/admin/anything", formData);
-  //     fetch();       // refetch table
-  //     onSuccess();   // close modal + green toast
-  //   } catch (err) {
-  //     if (err.response?.status === 422) {
-  //       onError(err.response.data.errors); // show errors under fields
-  //     }
-  //   }
-  // };
-
-  const newMsgs = state.stats?.new ?? 0;
-  const read = state.stats?.read ?? 0;
+  const responseRate = stats.total
+    ? `${Math.round((stats.read / stats.total) * 100)}%`
+    : "—";
 
   return (
     <>
@@ -141,10 +161,17 @@ const Messages = () => {
         <div className="topbar__left">
           <h1 className="topbar__title">Contact Messages</h1>
           <p className="topbar__subtitle">
-            {state.total} message{state.total !== 1 ? "s" : ""} total
+            {stats.total} message{stats.total !== 1 ? "s" : ""} total
           </p>
         </div>
-        <button className="topbar__refresh" onClick={fetch} title="Refresh">
+        <button
+          className="topbar__refresh"
+          onClick={() => {
+            fetch();
+            fetchStats();
+          }}
+          title="Refresh"
+        >
           <RefreshCw size={16} />
         </button>
       </header>
@@ -153,27 +180,25 @@ const Messages = () => {
         <div className="stats-grid">
           <StatCard
             label="Total"
-            value={state.total}
+            value={stats.total}
             icon={<Mail size={20} />}
             accent="blue"
           />
           <StatCard
             label="New"
-            value={newMsgs}
+            value={stats.new}
             icon={<MessagesSquare size={20} />}
             accent="amber"
           />
           <StatCard
             label="Read"
-            value={read}
+            value={stats.read}
             icon={<MailOpen size={20} />}
             accent="green"
           />
           <StatCard
             label="Response Rate"
-            value={
-              state.total ? `${Math.round((read / state.total) * 100)}%` : "—"
-            }
+            value={responseRate}
             icon={<TrendingUp size={20} />}
             accent="purple"
           />
@@ -201,9 +226,6 @@ const Messages = () => {
           total={state.total}
           perPage={state.perPage}
           onPageChange={onPageChange}
-          // creatable
-          // createLabel="New Message"
-          // onCreateSave={handleCreate}
         />
       </main>
     </>

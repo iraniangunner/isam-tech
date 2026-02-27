@@ -63,27 +63,59 @@ function reducer(s, action) {
   }
 }
 
+/**
+ * useDataTable — generic data-table hook with URL-synced search, sort & pagination.
+ *
+ * All endpoints must return a standard Laravel paginator:
+ *   { data: [], current_page, last_page, total, per_page }
+ *
+ * Options:
+ *   endpoint  {string}   — API endpoint e.g. "/admin/users"
+ *   dataKey   {string}   — key to store rows in state e.g. "users"
+ *   onView    {function} — (row, { dispatch, state, fetch }) => void
+ *   onEdit    {function} — (row, { dispatch, state, fetch }) => void
+ *   onDelete  {function} — (row, { dispatch, state, fetch, page, set }) => void
+ *                          Omit to use default: DELETE /:id then refetch.
+ *
+ * ── Usage examples ────────────────────────────────────────────────────────────
+ *
+ *   // Messages
+ *   useDataTable({ endpoint: "/admin/contact", dataKey: "messages" })
+ *
+ *   // Users
+ *   useDataTable({ endpoint: "/admin/users", dataKey: "users" })
+ *
+ *   // Orders with custom delete
+ *   useDataTable({
+ *     endpoint: "/admin/orders",
+ *     dataKey:  "orders",
+ *     onDelete: async (row, { fetch }) => {
+ *       await api.delete(`/admin/orders/${row.id}`);
+ *       fetch();
+ *     },
+ *   })
+ */
 export function useDataTable({ endpoint, dataKey, onView, onEdit, onDelete }) {
   const { page, search: searchParam, sortBy, sortDir, set } = useTableParams();
 
   const [inputValue, setInputValue] = useState(searchParam);
   const debouncedSearch = useDebounce(inputValue, 400);
 
-  // Keep a stable ref to `set` so the debounce effect never has a stale closure
+  // Stable ref to `set` — prevents stale closure in the debounce effect
   const setRef = useRef(set);
   useEffect(() => {
     setRef.current = set;
   });
 
+  // Sync debounced input → URL search param (skip when already in sync)
   useEffect(() => {
-    if (debouncedSearch === searchParam) return; // already in sync, do nothing
+    if (debouncedSearch === searchParam) return;
     setRef.current({ search: debouncedSearch });
   }, [debouncedSearch, searchParam]);
 
   const search = searchParam;
   const [state, dispatch] = useReducer(reducer, makeInitialState(dataKey));
 
-  // fetch receives params directly — no more reliance on a ref that may lag behind
   const fetch = useCallback(
     async ({ page, search, sortBy, sortDir } = {}) => {
       dispatch({ type: "LOADING" });
@@ -95,16 +127,16 @@ export function useDataTable({ endpoint, dataKey, onView, onEdit, onDelete }) {
             ...(sortBy && { sort_by: sortBy, sort_dir: sortDir }),
           },
         });
+
         const p = res.data;
         dispatch({
           type: "SUCCESS",
           payload: {
-            [dataKey]: p.submissions?.data ?? p.data ?? [],
-            currentPage: p.submissions?.current_page ?? p.current_page ?? 1,
-            lastPage: p.submissions?.last_page ?? p.last_page ?? 1,
-            total: p.submissions?.total ?? p.total ?? 0,
-            perPage: p.submissions?.per_page ?? p.per_page ?? 20,
-            stats: p.stats ?? null,
+            [dataKey]: p.data ?? [],
+            currentPage: p.current_page ?? 1,
+            lastPage: p.last_page ?? 1,
+            total: p.total ?? 0,
+            perPage: p.per_page ?? 20,
           },
         });
       } catch (err) {
@@ -115,7 +147,7 @@ export function useDataTable({ endpoint, dataKey, onView, onEdit, onDelete }) {
     [endpoint, dataKey],
   );
 
-  // Re-fetch whenever any URL param changes, passing them directly into fetch
+  // Re-fetch whenever any URL param changes
   useEffect(() => {
     fetch({ page, search, sortBy, sortDir });
   }, [page, search, sortBy, sortDir, fetch]);
@@ -140,6 +172,7 @@ export function useDataTable({ endpoint, dataKey, onView, onEdit, onDelete }) {
       if (onDelete) {
         await onDelete(row, { dispatch, state, fetch, page, set });
       } else {
+        // Default: DELETE /:id then refetch (go to prev page if last row on page)
         try {
           await api.delete(`${endpoint}/${row.id}`);
           const rows = state[dataKey] ?? [];
@@ -169,7 +202,7 @@ export function useDataTable({ endpoint, dataKey, onView, onEdit, onDelete }) {
     state,
     inputValue,
     setInputValue,
-    fetch: () => fetch({ page, search, sortBy, sortDir }), // public API stays zero-arg
+    fetch: () => fetch({ page, search, sortBy, sortDir }), // zero-arg public API
     handleView,
     handleEdit,
     handleDelete,
