@@ -75,15 +75,10 @@ export function useDataTable({ endpoint, dataKey, onView, onEdit, onDelete }) {
     setRef.current = set;
   });
 
-  // Sync debounced search → URL (skip on first render to avoid overwriting URL params on mount)
-  const isFirstRender = useRef(true);
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
+    if (debouncedSearch === searchParam) return; // already in sync, do nothing
     setRef.current({ search: debouncedSearch });
-  }, [debouncedSearch]);
+  }, [debouncedSearch, searchParam]);
 
   const search = searchParam;
   const [state, dispatch] = useReducer(reducer, makeInitialState(dataKey));
@@ -104,11 +99,12 @@ export function useDataTable({ endpoint, dataKey, onView, onEdit, onDelete }) {
         dispatch({
           type: "SUCCESS",
           payload: {
-            [dataKey]: p.data ?? [],
-            currentPage: p.current_page ?? 1,
-            lastPage: p.last_page ?? 1,
-            total: p.total ?? 0,
-            perPage: p.per_page ?? 20,
+            [dataKey]: p.submissions?.data ?? p.data ?? [],
+            currentPage: p.submissions?.current_page ?? p.current_page ?? 1,
+            lastPage: p.submissions?.last_page ?? p.last_page ?? 1,
+            total: p.submissions?.total ?? p.total ?? 0,
+            perPage: p.submissions?.per_page ?? p.per_page ?? 20,
+            stats: p.stats ?? null,
           },
         });
       } catch (err) {

@@ -70,7 +70,7 @@ const MESSAGE_COLUMNS = [
     key: "created_at",
     header: "Date",
     width: "130px",
-    // editType: "date", 
+    // editType: "date",
     render: (v) =>
       new Date(v).toLocaleDateString("en-US", {
         year: "numeric",
@@ -83,7 +83,7 @@ const MESSAGE_COLUMNS = [
     header: "Message",
     hideInTable: true,
     fullWidth: true,
-    // editType: "textarea", 
+    // editType: "textarea",
   },
 ];
 
@@ -110,7 +110,7 @@ const Messages = () => {
           payload: {
             ...state,
             messages: state.messages.map((m) =>
-              m.id === row.id ? { ...m, status: "read" } : m
+              m.id === row.id ? { ...m, status: "read" } : m,
             ),
           },
         });
@@ -132,8 +132,8 @@ const Messages = () => {
   //   }
   // };
 
-  const newMsgs = state.messages.filter((m) => m.status === "new").length;
-  const read = state.messages.filter((m) => m.status === "read").length;
+  const newMsgs = state.stats?.new ?? 0;
+  const read = state.stats?.read ?? 0;
 
   return (
     <>
@@ -201,8 +201,8 @@ const Messages = () => {
           total={state.total}
           perPage={state.perPage}
           onPageChange={onPageChange}
-          // creatable 
-          // createLabel="New Message" 
+          // creatable
+          // createLabel="New Message"
           // onCreateSave={handleCreate}
         />
       </main>
